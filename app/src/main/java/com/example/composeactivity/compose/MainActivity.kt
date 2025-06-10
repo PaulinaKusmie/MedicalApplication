@@ -24,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.composeactivity.R
 import com.example.composeactivity.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.ui.theme.MainColor
@@ -35,64 +38,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val context = LocalContext.current
-            ComposeActivityTheme {
-                Scaffold(
-                    modifier = Modifier.Companion
-                ) { innerPadding ->
-                    Box(
-                        modifier = Modifier.Companion
-                            .fillMaxSize()
-                            .background(MainColor)
-                    ) {
-                        Column(
-                            modifier = Modifier.Companion
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .padding(50.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier.Companion
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Companion.TopCenter
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.medical),
-                                    contentDescription = "Medical image",
-                                    modifier = Modifier.Companion.size(400.dp).padding(40.dp)
-                                )
-
-                            }
-                            Spacer(modifier = Modifier.Companion.height(30.dp))
-                            GenerateButton("Wizyty"){
-                                ExaminationView().Screen()
-                            }
-                            Spacer(modifier = Modifier.Companion.height(16.dp))
-                            GenerateButton("Badania medyczne"){
-
-                            }
-
+                val navController = rememberNavController()
+                ComposeActivityTheme {
+                    NavHost(navController = navController, startDestination = "MainScreen") {
+                        composable("MainScreen") {
+                            MainScreen(navController)
+                        }
+                        composable("ExaminationView") {
+                            ExaminationScreen()
                         }
                     }
-
                 }
-
-            }
-
         }
     }
 
-    @Composable
-    fun GenerateButton(label: String, onClick: @Composable () -> Unit) {
-        OutlinedButton(
-            modifier = Modifier.Companion
-                .height(80.dp)
-                .width(310.dp),
-            onClick = onClick as () -> Unit
-        ) {
-            Text("$label")
-        }
-    }
+
+
 
 
 }
