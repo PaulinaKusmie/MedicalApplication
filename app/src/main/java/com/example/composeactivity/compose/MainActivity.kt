@@ -34,7 +34,6 @@ import com.example.composeactivity.ui.theme.MainColor
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -44,8 +43,11 @@ class MainActivity : ComponentActivity() {
                         composable("MainScreen") {
                             MainScreen(navController)
                         }
-                        composable("ExaminationView") {
+                        composable("ExaminationScreen") {
                             ExaminationScreen()
+                        }
+                        composable("SpecjalizationScreen") {
+                            SpecjalizationScreen()
                         }
                     }
                 }

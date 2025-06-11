@@ -41,11 +41,11 @@ fun MainScreen(navController: NavController) {
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 GenerateButton("Wizyty") {
-                    navController.navigate("ExaminationView")
+                    navController.navigate("ExaminationScreen")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 GenerateButton("Badania medyczne") {
-                    // Dodaj nawigację do kolejnego ekranu
+                    navController.navigate("SpecjalizationScreen")
                 }
             }
         }

@@ -3,7 +3,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
-@Entity(tableName = "examinations")
+@Entity(tableName = "examination")
 data class Examination(
     @PrimaryKey val id: UUID,
     val name: String,
