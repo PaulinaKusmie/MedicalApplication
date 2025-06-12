@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -45,8 +47,8 @@ dependencies {
 
     val room_version = "2.6.1"
     val nav_version = "2.9.0"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
 
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -63,6 +65,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+
+
 
     // ROOM
     implementation("androidx.room:room-runtime:$room_version")

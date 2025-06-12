@@ -9,5 +9,5 @@ class ExaminationRepository(private val dao: ExaminationDao) {
 
     val allExamination :Flow<List<Examination>> = dao.getExamination();
 
-    suspend fun updateActive(id: UUID, isActive: Boolean) = dao.updateActive(id,isActive)
+    suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
 }

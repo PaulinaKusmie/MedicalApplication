@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Entity(tableName = "examination")
 data class Examination(
-    @PrimaryKey val id: UUID,
+    @PrimaryKey val id: Integer,
     val name: String,
     val isActive: Boolean
 )

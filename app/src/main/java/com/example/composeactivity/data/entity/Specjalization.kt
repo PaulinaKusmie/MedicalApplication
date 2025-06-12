@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "specjalization")
 data class Specjalization(
-    @PrimaryKey(autoGenerate = true) val id: UUID,
+    @PrimaryKey(autoGenerate = true) val id: Integer,
     val name: String,
     val isActive: Boolean
 )

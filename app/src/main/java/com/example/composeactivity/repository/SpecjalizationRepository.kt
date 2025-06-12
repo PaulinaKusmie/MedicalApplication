@@ -9,6 +9,6 @@ class SpecjalizationRepository(private val dao: SpecjalizationDao) {
 
     val allSpecjalization :Flow<List<Specjalization>> = dao.getSpecjalization();
 
-    suspend fun updateActive(id: UUID, isActive: Boolean) = dao.updateActive(id,isActive)
+    suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
 
 }

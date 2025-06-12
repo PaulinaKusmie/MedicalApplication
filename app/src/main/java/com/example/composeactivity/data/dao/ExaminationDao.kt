@@ -12,6 +12,6 @@ interface ExaminationDao {
     fun getExamination() : Flow<List<Examination>>
 
     @Query("UPDATE examination set IsActive = :isActive where id = :id")
-    fun updateActive( id : UUID, isActive: Boolean)
+    fun updateActive( id : Int, isActive: Boolean)
 
 }
