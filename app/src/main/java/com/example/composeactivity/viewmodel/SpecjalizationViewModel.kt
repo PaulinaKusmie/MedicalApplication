@@ -14,10 +14,11 @@ class SpecjalizationViewModel(application: Application) : AndroidViewModel(appli
     private val repo =  SpecjalizationRepository(AppDatabase.get(application).specjalizationDao())
     val specjalizations = repo.allSpecjalization.asLiveData()
 
-    fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
+      fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
             repo.updateActive(id, isActive);
 
     }
+
 
 }
 

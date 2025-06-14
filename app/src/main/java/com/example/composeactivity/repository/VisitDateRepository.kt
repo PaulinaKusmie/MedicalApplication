@@ -8,4 +8,5 @@ class VisitDateRepository(private val dao: VisitDateDao) {
 
     val allVisitDate :Flow<List<VisitDate>> = dao.getVisitDate();
 
+    suspend fun addVisit(visitDate: VisitDate) = dao.insert(visitDate)
 }

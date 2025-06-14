@@ -8,6 +8,8 @@ import java.util.UUID
 data class Specjalization(
     @PrimaryKey(autoGenerate = true) val id: Integer,
     val name: String,
-    val isActive: Boolean
+    val isActive: Boolean,
+    val sex: Int = 0, // 0=all, 1=women, 2=men
+    val isPay: Boolean = false,
 )
 

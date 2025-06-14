@@ -10,8 +10,8 @@ import java.util.UUID
 @Dao
 interface SpecjalizationDao {
     @Query("SELECT * FROM specjalization")
-    fun getSpecjalization() : Flow<List<Specjalization>>
+     fun getSpecjalization() : Flow<List<Specjalization>>
 
     @Query("UPDATE specjalization set IsActive = :isActive where id = :id")
-    fun updateActive( id : Int, isActive: Boolean)
+    suspend fun updateActive( id : Int, isActive: Boolean)
 }
