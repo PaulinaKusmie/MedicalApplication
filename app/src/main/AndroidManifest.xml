@@ -13,6 +13,11 @@
         android:theme="@style/Theme.ComposeActivity"
         tools:targetApi="31">
         <activity
+            android:name=".compose.ui.theme.Utility"
+            android:exported="false"
+            android:label="@string/title_activity_utility"
+            android:theme="@style/Theme.ComposeActivity" />
+        <activity
             android:name=".compose.SpecjalizationScreen"
             android:exported="false"
             android:label="@string/title_activity_specjalization_screen"

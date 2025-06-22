@@ -1,3 +1,5 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -41,12 +43,20 @@ android {
         compose = true
         viewBinding = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "2.0.0"
+    }
 }
 
 dependencies {
 
+
+
     val room_version = "2.6.1"
     val nav_version = "2.9.0"
+
+    implementation(libs.wheelPickerCompose)
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.compose.runtime:runtime-livedata")
@@ -66,7 +76,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
 
 
 
