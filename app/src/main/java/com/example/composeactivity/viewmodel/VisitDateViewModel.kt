@@ -11,7 +11,9 @@ import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
 import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.VisitDate
 import com.example.composeactivity.repository.VisitDateRepository
+import com.example.composeactivity.viewmodel.Converter
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class VisitDateViewModel (application: Application) : AndroidViewModel(application)  {
 
@@ -22,7 +24,7 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
         repo.addVisit(visitDate)
     }
 
-    private val dateVisitUI = mutableStateOf(VisitDateUiState())
+    internal val dateVisitUI = mutableStateOf(VisitDateUiState())
     val DateVisitUI : State<VisitDateUiState> = dateVisitUI
 
 
@@ -31,6 +33,7 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
         {
             is EntryMode.AddSpecjalizationVisit -> {
                 dateVisitUI.value = VisitDateUiState(specjalizationId = mode.specjalizationId)
+                dateVisitUI.value.doneDate  = Converter.localDateTimeToLong(LocalDateTime.now())
             }
 
             is EntryMode.AddExaminationVisit -> {
@@ -42,4 +45,6 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
             }
         }
     }
+
+
 }
