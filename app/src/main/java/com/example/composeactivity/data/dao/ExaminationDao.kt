@@ -4,6 +4,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.composeactivity.data.entity.Examination
+import com.example.composeactivity.data.entity.VisitDate
 
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -23,6 +24,7 @@ interface ExaminationDao {
     @Delete()
     suspend fun delete(examination: Examination)
 
-
+    @Query("SELECT name FROM examination where id = :id ")
+    fun getExaminationName(id : Int): String
 
 }

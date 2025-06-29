@@ -4,21 +4,25 @@ import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
 import com.example.composeactivity.data.entity.VisitDate
 
 class VisitDateMapper {
-    fun VisitDate.toUiState() = VisitDateUiState(
-        id = id,
-        specjalizationId = specjalizationId,
-        examinationId = examinationId,
-        doneDate = doneDate,
-        predictedDate = predictedDate,
-        appointmentDate = appointmentDate
-    )
+    companion object {
+        fun VisitDate.toUiState() = VisitDateUiState(
+            id = id,
+            specjalizationId = specjalizationId,
+            examinationId = examinationId,
+            doneDate = doneDate,
+            predictedDate = predictedDate,
+            appointmentDate = appointmentDate
+        )
 
-    fun VisitDateUiState.toEntity() = VisitDate(
-        id = if (id.toLong() == -1L) 0 else id,
-        specjalizationId = specjalizationId,
-        examinationId = examinationId,
-        doneDate = doneDate,
-        predictedDate = predictedDate,
-        appointmentDate = appointmentDate
-    )
+        fun VisitDateUiState.toEntity() = VisitDate(
+            id = if (id.toLong() == -1L) 0 else id,
+            specjalizationId = specjalizationId,
+            examinationId = examinationId,
+            doneDate = doneDate,
+            predictedDate = predictedDate,
+            appointmentDate = appointmentDate
+        )
+
+    }
+
 }

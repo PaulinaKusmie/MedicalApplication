@@ -15,4 +15,6 @@ class ExaminationRepository(private val dao: ExaminationDao) {
     suspend fun addExamination(examination: Examination) = dao.insert(examination)
 
     suspend fun deleteExamination(examination: Examination) = dao.delete(examination)
+
+    suspend fun getExaminationName(id: Int) = dao.getExaminationName(id)
 }

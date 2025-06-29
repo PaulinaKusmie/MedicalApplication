@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 
 public class  Converter {
      companion object {
-         public fun longToLocalDateTime(timestamp: Long): LocalDateTime {
+         public fun longToLocalDateTime(timestamp: Long?): LocalDateTime {
              return Instant.ofEpochMilli(timestamp)
                  .atZone(ZoneId.systemDefault())
                  .toLocalDateTime()

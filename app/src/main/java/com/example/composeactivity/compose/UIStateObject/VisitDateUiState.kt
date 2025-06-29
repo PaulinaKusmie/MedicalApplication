@@ -6,6 +6,7 @@ data class VisitDateUiState(
     val id: Int = -1,
     val specjalizationId: Int? = null,
     val examinationId: Int? = null,
+    var name : String?  = null,
     var doneDate: Long? = null,
     val predictedDate: Long? = null,
     val appointmentDate: Long? = null

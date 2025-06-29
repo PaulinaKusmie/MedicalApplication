@@ -22,4 +22,7 @@ interface SpecjalizationDao {
 
     @Delete()
     suspend fun delete(specjalization: Specjalization)
+
+    @Query("SELECT name FROM specjalization where id = :id")
+    fun getSpecjalizationName(id : Int): String
 }

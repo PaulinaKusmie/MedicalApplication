@@ -30,12 +30,26 @@ class MainActivity : ComponentActivity() {
                         composable("SpecjalizationScreen") {
                             SpecjalizationScreen(navController)
                         }
-                        composable(route = "dataEntryAddWizyta/{specjalizationId}",
-                            arguments = listOf(navArgument("specjalizationId") { type = NavType.IntType })
+
+                        composable(route = "AddEditVisitSpecjalization/{specjalizationId},{name}",
+                            arguments = listOf(navArgument("specjalizationId") { type = NavType.IntType },
+                                navArgument("name") { type = NavType.StringType } )
                         ) {
                             val id = it.arguments?.getInt("specjalizationId")!!
+                            val name = it.arguments?.getString("name")!!
                             DataAddEditScreen(
-                                entryMode = EntryMode.AddSpecjalizationVisit(id),
+                                entryMode = EntryMode.AddSpecjalizationVisit(id, name),
+                                onSaved = { navController.popBackStack() })
+                        }
+
+                        composable(route = "AddEditVisitExamination/{examinationId},{name}",
+                            arguments = listOf(navArgument("examinationId") { type = NavType.IntType },
+                                navArgument("name") { type = NavType.StringType } )
+                        ) {
+                            val id = it.arguments?.getInt("examinationId")!!
+                            val name = it.arguments?.getString("name")!!
+                            DataAddEditScreen(
+                                entryMode = EntryMode.AddSpecjalizationVisit(id, name),
                                 onSaved = { navController.popBackStack() })
                         }
                     }

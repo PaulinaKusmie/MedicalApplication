@@ -28,12 +28,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExaminationScreen(viewModel : ExaminationViewModel = viewModel()) {
+fun ExaminationScreen(navController: NavController,viewModel : ExaminationViewModel = viewModel()) {
     val examinations by viewModel.examinations.observeAsState(initial = emptyList())
 
 
@@ -60,7 +61,10 @@ fun ExaminationScreen(viewModel : ExaminationViewModel = viewModel()) {
                     exam = exam,
                     onActiveChange = { isActive ->
                         viewModel.updateIsActive(exam.id, isActive)
-                       // viewModel.deleteExamination(exam)
+                    },
+                    onClick = {
+                        examid ->
+                        navController.navigate("AddEditVisitExamination/$examid,${exam.name}")
                     }
                 )
 
@@ -73,7 +77,7 @@ fun ExaminationScreen(viewModel : ExaminationViewModel = viewModel()) {
 fun ExaminationItem(
     exam: Examination,
     onActiveChange: (Boolean) -> Unit,
-    onClick: () -> Unit = {}
+    onClick: (Int) -> Unit
 ) {
     // Gradienty
     val cardGradient = Brush.linearGradient(
@@ -92,7 +96,7 @@ fun ExaminationItem(
             .padding(vertical = 10.dp, horizontal = 20.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(cardGradient)
-            .clickable() { onClick() },
+            .clickable() { onClick(exam.id) },
         color = Color.Transparent,
     ) {
         Row(

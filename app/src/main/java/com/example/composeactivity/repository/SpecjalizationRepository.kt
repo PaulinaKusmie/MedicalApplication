@@ -18,4 +18,6 @@ class SpecjalizationRepository(private val dao: SpecjalizationDao) {
 
     suspend fun deleteSpecjalization(specjalization: Specjalization) = dao.delete(specjalization)
 
+    suspend fun getSpecjalizationName(id: Int) = dao.getSpecjalizationName(id)
+
 }

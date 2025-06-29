@@ -83,7 +83,7 @@ fun SpecjalizationScreen(  navController: NavController,viewModel : Specjalizati
                     viewModel.updateIsActive(spec.id, isActive)
                 },
                 onClick = { specid ->
-                            navController.navigate("dataEntryAddWizyta/$specid") },
+                            navController.navigate("AddEditVisitSpecjalization/$specid,${spec.name}") },
 
 
             )

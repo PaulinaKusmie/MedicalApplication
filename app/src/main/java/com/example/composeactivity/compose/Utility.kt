@@ -13,6 +13,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +32,14 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 sealed class EntryMode {
-    data class AddSpecjalizationVisit(val specjalizationId: Int) : EntryMode()
-    data class AddExaminationVisit(val examinationId: Int) : EntryMode()
-    data class Edit(val entryId: Int) : EntryMode()
+    data class AddSpecjalizationVisit(val specjalizationId: Int, val name : String) : EntryMode()
+    data class AddExaminationVisit(val examinationId: Int, val name : String) : EntryMode()
+}
+
+enum class DateType {
+    DONE,
+    PREDICTED,
+    APPOITMENT
 }
 
 
@@ -67,51 +73,64 @@ fun GradientSwitch(
 }
 
 @Composable
-fun WheelPickerDemo(OnDismissRequest : () -> Unit)  {
+fun WheelPickerDemo(OnDismissRequest : () -> Unit,
+                    dateTime :  MutableState<LocalDateTime?>) {
 
+    val currentDate = dateTime.value ?: LocalDateTime.now()
 
-  //  var showDialog by remember { mutableStateOf(false) }
+    var resultDate: LocalDateTime? = null
+    AlertDialog(
+        modifier = Modifier,
+        onDismissRequest = OnDismissRequest,
+        title = { Text("title") },
 
-  //  if (showDialog) {
-        AlertDialog(
-            modifier = Modifier.height(400.dp),
-            onDismissRequest = OnDismissRequest,
-            title = { Text("title") },
-
-            text = {
-                WheelDateTimePicker(
-                    startDateTime = LocalDateTime.of(2025, 6, 19, 14, 30),
-                    minDateTime = LocalDateTime.now(),
-                    maxDateTime = LocalDateTime.of(2030, 12, 31, 23, 59),
-                    timeFormat = TimeFormat.HOUR_24,
-                    size = DpSize(250.dp, 120.dp),
-                    rowCount = 5,
-                    textStyle = MaterialTheme.typography.titleMedium,
-                    textColor = Color.Cyan,
-                    selectorProperties = WheelPickerDefaults.selectorProperties(
-                        enabled = true,
-                        color = Color.Gray.copy(alpha = 0.2f)
-                    )
+        text = {
+            WheelDateTimePicker(
+                startDateTime = LocalDateTime.of(
+                    currentDate.year,
+                    currentDate.month,
+                    currentDate.dayOfMonth,
+                    currentDate.hour,
+                    currentDate.minute
+                ),
+                minDateTime = LocalDateTime.now(),
+                maxDateTime = LocalDateTime.of(
+                    currentDate.year + 50,
+                    currentDate.month,
+                    currentDate.dayOfMonth,
+                    currentDate.hour,
+                    currentDate.minute
+                ),
+                timeFormat = TimeFormat.HOUR_24,
+                size = DpSize(250.dp, 120.dp),
+                rowCount = 5,
+                textStyle = MaterialTheme.typography.titleMedium,
+                textColor = Color.Black,
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    enabled = true,
+                    color = Color.Gray.copy(alpha = 0.2f)
                 )
-            },
+            ) { snappedDateTime -> resultDate = snappedDateTime  }
+        },
 
-            confirmButton = {
-
-            },
-            dismissButton = {
-                Button(onClick = OnDismissRequest)
-                {
-                    Text("Cancel")
-                }
-
+        confirmButton = {
+            Button(onClick = OnDismissRequest)
+            {
+                Text("Akceptuj")
+            }
+        },
+        dismissButton = {
+            Button(onClick = OnDismissRequest)
+            {
+                Text("Zamknij")
+                resultDate = (if (currentDate == null) null else currentDate) as LocalDateTime?
             }
 
-
-        )
-   // }
-
-
+        }
+    )
 }
+
+
 
 //    WheelDateTimePicker(
 //        startDateTime = LocalDateTime.of(2025,6,19,14,30),
