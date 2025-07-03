@@ -7,8 +7,8 @@ class VisitDateMapper {
     companion object {
         fun VisitDate.toUiState() = VisitDateUiState(
             id = id,
-            specjalizationId = specjalizationId,
-            examinationId = examinationId,
+            type = type,
+            foreignId = foreignId,
             doneDate = doneDate,
             predictedDate = predictedDate,
             appointmentDate = appointmentDate
@@ -16,8 +16,8 @@ class VisitDateMapper {
 
         fun VisitDateUiState.toEntity() = VisitDate(
             id = if (id.toLong() == -1L) 0 else id,
-            specjalizationId = specjalizationId,
-            examinationId = examinationId,
+            type = type,
+            foreignId = foreignId,
             doneDate = doneDate,
             predictedDate = predictedDate,
             appointmentDate = appointmentDate

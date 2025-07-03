@@ -5,13 +5,16 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-public class  Converter {
+class  Converter {
      companion object {
-         public fun longToLocalDateTime(timestamp: Long?): LocalDateTime {
-             return Instant.ofEpochMilli(timestamp)
-                 .atZone(ZoneId.systemDefault())
-                 .toLocalDateTime()
+         fun longToLocalDateTime(timestamp: Long?): LocalDateTime? {
+             return timestamp?.let {
+                 Instant.ofEpochMilli(it)
+                     .atZone(ZoneId.systemDefault())
+                     .toLocalDateTime()
+             }
          }
+
 
          fun localDateTimeToLong(dateTime: LocalDateTime): Long {
              return dateTime.atZone(ZoneId.systemDefault())

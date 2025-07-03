@@ -38,8 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
+import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.Converter
+import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toEntity
 import com.example.composeactivity.viewmodel.VisitDateViewModel
 import java.time.LocalDateTime
 
@@ -57,19 +59,18 @@ fun DataAddEditScreen(
         viewModel.setMode(mode = entryMode)
     }
 
-    val state = viewModel.dateVisitUI
-
+    val dateVisitState = viewModel.DateVisitUI.value
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = state.value.name ?: "Edytuj Dane",
+                        text = dateVisitState.name ?: "Edytuj Dane",
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            fontFamily = FontFamily.Serif, // Możesz podmienić np. na FontFamily.Cursive lub własny font
+                            fontFamily = FontFamily.Monospace, // Możesz podmienić np. na FontFamily.Cursive lub własny font
                             color = Color.Black,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Light
                         )
                     )
                 },
@@ -99,8 +100,9 @@ fun DataAddEditScreen(
 
             DateSection(
                 label = "Data ostatniej wizyty:",
-                date = state.value.doneDate,
-                onEditClick = {  pickedDate.value = Converter.longToLocalDateTime(state.value.doneDate)
+                date = dateVisitState.doneDate,
+                onEditClick = {
+                    pickedDate.value = Converter.longToLocalDateTime(dateVisitState.doneDate)
                     editingType.value = DateType.DONE
                     showDialog = true
                               },
@@ -109,35 +111,52 @@ fun DataAddEditScreen(
 
             DateSection(
                 label = "Przewidywana data następnej wizyty:",
-                date = state.value.predictedDate,
-                onEditClick = { pickedDate.value = Converter.longToLocalDateTime(state.value.predictedDate)
+                date = dateVisitState.predictedDate,
+                onEditClick = {
+                    pickedDate.value = Converter.longToLocalDateTime(dateVisitState.predictedDate)
                     editingType.value = DateType.PREDICTED
-                    showDialog = true},
+                    showDialog = true
+                              },
                 onClearClick = { /*viewModel.clearDate()*/ },
 
             )
             DateSection(label = "Umówiona data następnej wizyty:",
-                date = state.value.appointmentDate,
-                onEditClick = {pickedDate.value = Converter.longToLocalDateTime(state.value.appointmentDate)
+                date = dateVisitState.appointmentDate,
+                onEditClick = {
+                    pickedDate.value = Converter.longToLocalDateTime(dateVisitState.appointmentDate)
                     editingType.value = DateType.APPOITMENT
-                    showDialog = true },
+                    showDialog = true
+                              },
                 onClearClick = { /*viewModel.clearDate()*/ },
 
             )
 
             if (showDialog && editingType.value != null) {
                 WheelPickerDemo(
+
                     OnDismissRequest = {
                         showDialog = false
                         when (editingType.value) {
-                            DateType.DONE -> pickedDate.value?.let { viewModel.updateDoneDate(Converter.localDateTimeToLong(it)) }
-                            DateType.PREDICTED -> pickedDate.value?.let { viewModel.updatePredictedDate(Converter.localDateTimeToLong(it)) }
-                            DateType.APPOITMENT -> pickedDate.value?.let { viewModel.updateAppointmentDate(Converter.localDateTimeToLong(it)) }
+                            DateType.DONE -> pickedDate.value?.let {
+                                dateVisitState.doneDate = Converter.localDateTimeToLong(it)
+                                viewModel.updateDoneDate(dateVisitState.toEntity())
+                            }
+                            DateType.PREDICTED -> pickedDate.value?.let {
+
+                                dateVisitState.predictedDate = Converter.localDateTimeToLong(it)
+                                viewModel.updatePredictedDate(dateVisitState.toEntity())
+                            }
+                            DateType.APPOITMENT -> pickedDate.value?.let {
+
+                                dateVisitState.appointmentDate = Converter.localDateTimeToLong(it)
+                                viewModel.updateAppointmentDate(dateVisitState.toEntity())
+                            }
                             null -> {}
                         }
                         editingType.value = null
                     },
                     dateTime = pickedDate
+
                 )
             }
 
@@ -213,12 +232,12 @@ fun DateSection(
 //        viewModel.setMode(mode = entryMode)
 //    }
 //
-//    val state = viewModel.dateVisitUI
+//    val dateVisitState = viewModel.dateVisitUI
 //
 //    Scaffold(
 //        topBar = {
 //            TopAppBar( modifier = Modifier.background(MainColor),
-//                title = { Text("${state.value.name}") },
+//                title = { Text("${dateVisitState.name}") },
 //                colors = TopAppBarDefaults.topAppBarColors(
 //                    containerColor = MainColor
 //                )
@@ -241,7 +260,7 @@ fun DateSection(
 //            var showDialog by remember { mutableStateOf(false) }
 //                Row(){
 //                    Text("Dzisiaj jest:")
-//                    val okon = state.value.doneDate
+//                    val okon = dateVisitState.doneDate
 //                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
 //                    Button(
 //                        onClick = { showDialog = true },
@@ -252,14 +271,14 @@ fun DateSection(
 //
 //                Row(){
 //                    Text("Jutro jest:")
-//                    val okon = state.value.doneDate
+//                    val okon = dateVisitState.doneDate
 //                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
 //                    Spacer(modifier = Modifier.height(8.dp))
 //                }
 //                Spacer(modifier = Modifier.height(8.dp))
 //                Row(){
 //                    Text("Wczoraj było:")
-//                    val okon = state.value.doneDate
+//                    val okon = dateVisitState.doneDate
 //                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
 //                    Spacer(modifier = Modifier.height(8.dp))
 //                }

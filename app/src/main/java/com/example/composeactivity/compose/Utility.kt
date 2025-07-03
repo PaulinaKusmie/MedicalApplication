@@ -42,6 +42,10 @@ enum class DateType {
     APPOITMENT
 }
 
+enum class VisitType {
+    SPECIALIZATION,
+    EXAMINATION
+}
 
 @Composable
 fun GradientSwitch(
@@ -114,9 +118,13 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
         },
 
         confirmButton = {
-            Button(onClick = OnDismissRequest)
+            Button(
+                onClick = {
+                    dateTime.value = resultDate
+                    OnDismissRequest() } )
             {
                 Text("Akceptuj")
+
             }
         },
         dismissButton = {

@@ -14,7 +14,7 @@ import com.example.composeactivity.data.entity.Examination
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.data.entity.VisitDate
 
-@Database(entities = [Examination::class, Specjalization::class , VisitDate::class], version = 3)
+@Database(entities = [Examination::class, Specjalization::class , VisitDate::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract  fun examinationDao(): ExaminationDao
     abstract  fun specjalizationDao(): SpecjalizationDao

@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController)
                         }
                         composable("ExaminationScreen") {
-                            ExaminationScreen()
+                            ExaminationScreen(navController)
                         }
                         composable("SpecjalizationScreen") {
                             SpecjalizationScreen(navController)
