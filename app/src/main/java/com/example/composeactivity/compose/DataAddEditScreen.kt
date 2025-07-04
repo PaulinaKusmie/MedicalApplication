@@ -98,6 +98,8 @@ fun DataAddEditScreen(
             val pickedDate = remember { mutableStateOf<LocalDateTime?>(null) }
             val editingType = remember { mutableStateOf<DateType?>(null) }
 
+
+
             DateSection(
                 label = "Data ostatniej wizyty:",
                 date = dateVisitState.doneDate,
@@ -106,8 +108,10 @@ fun DataAddEditScreen(
                     editingType.value = DateType.DONE
                     showDialog = true
                               },
-                onClearClick = { /*viewModel.clearDate()*/ },
+                onClearClick = { viewModel.clearDate(DateType.DONE) },
             )
+
+
 
             DateSection(
                 label = "Przewidywana data następnej wizyty:",
@@ -117,9 +121,12 @@ fun DataAddEditScreen(
                     editingType.value = DateType.PREDICTED
                     showDialog = true
                               },
-                onClearClick = { /*viewModel.clearDate()*/ },
+                onClearClick = {  viewModel.clearDate(DateType.PREDICTED)},
 
             )
+
+
+
             DateSection(label = "Umówiona data następnej wizyty:",
                 date = dateVisitState.appointmentDate,
                 onEditClick = {
@@ -127,7 +134,7 @@ fun DataAddEditScreen(
                     editingType.value = DateType.APPOITMENT
                     showDialog = true
                               },
-                onClearClick = { /*viewModel.clearDate()*/ },
+                onClearClick = {  viewModel.clearDate(DateType.APPOITMENT) },
 
             )
 

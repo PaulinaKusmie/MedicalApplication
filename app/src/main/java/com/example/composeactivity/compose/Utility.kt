@@ -86,8 +86,6 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
     AlertDialog(
         modifier = Modifier,
         onDismissRequest = OnDismissRequest,
-        title = { Text("title") },
-
         text = {
             WheelDateTimePicker(
                 startDateTime = LocalDateTime.of(
@@ -139,52 +137,3 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
 }
 
 
-
-//    WheelDateTimePicker(
-//        startDateTime = LocalDateTime.of(2025,6,19,14,30),
-//        minDateTime = LocalDateTime.now(),
-//        maxDateTime = LocalDateTime.of(2030,12,31,23,59),
-//        timeFormat = TimeFormat.HOUR_24,
-//        size = DpSize(250.dp,120.dp),
-//        rowCount = 5,
-//        textStyle = MaterialTheme.typography.titleMedium,
-//        textColor = Color.Cyan,
-//        selectorProperties = WheelPickerDefaults.selectorProperties(
-//            enabled = true,
-//            color = Color.Gray.copy(alpha = 0.2f)
-//        )
-//    ) { selected ->
-//        Log.d("WheelPicker", "Wybrano: $selected")
-//    }
-
-
-
-
-
-//@Composable
-//fun MyPopupDialog(title : String) {
-//    var showDialog by remember { mutableStateOf(true) }
-//    if(showDialog){
-//        AlertDialog(
-//            modifier = Modifier.height(400.dp),
-//            onDismissRequest = { showDialog = false },
-//            title = { Text(title) },
-//            text = {
-//                val currentDate = LocalDateTime.now()
-//                Text("Dzisiaj jest: $currentDate")
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Text("Dzisiaj jest: $currentDate")
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Text("Dzisiaj jest: $currentDate")
-//
-//            },
-//            confirmButton = {
-//                Button(onClick = {showDialog = false  }) {
-//                    Text("OK")
-//                }
-//            }
-//        )
-//    }
-//
-//
-//}

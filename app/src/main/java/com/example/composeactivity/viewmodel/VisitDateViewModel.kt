@@ -1,12 +1,14 @@
 package com.example.composeactivity.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.example.composeactivity.compose.DateType
 import com.example.composeactivity.compose.EntryMode
 import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
 import com.example.composeactivity.compose.VisitType
@@ -22,11 +24,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 
 class VisitDateViewModel (application: Application) : AndroidViewModel(application)  {
-
     private val repo =  VisitDateRepository(AppDatabase.get(application).visitDateDao())
-    val dates = repo.allVisitDate.asLiveData()
-
-
 
     internal val dateVisitUI = mutableStateOf(VisitDateUiState())
     val DateVisitUI : State<VisitDateUiState> = dateVisitUI
@@ -61,22 +59,58 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
 
 
 
-     fun updateDoneDate(visitDate: VisitDate) = viewModelScope.launch{
-         if(visitDate.id != 0)
-            repo.updateDoneDate(visitDate)
-         else
-             repo.addVisit(visitDate)
+     fun updateDoneDate(visitDate: VisitDate) {
+         viewModelScope.launch {
+             try{
+             if (visitDate.id != 0)
+                 repo.updateDoneDate(visitDate)
+             else
+                 repo.addVisit(visitDate)
+            } catch (e : Exception){ Log.e("Error", "on create or update DoneDate")}
+         }
     }
-     fun updatePredictedDate(visitDate: VisitDate) = viewModelScope.launch{
-       // repo.addVisit(visitDate)
+     fun updatePredictedDate(visitDate: VisitDate) {
+         viewModelScope.launch {
+             try{
+             if (visitDate.id != 0)
+                 repo.updatePredictedDate(visitDate)
+             else
+                 repo.addVisit(visitDate)
+             } catch (e : Exception){ Log.e("Error", "on create or update PredictedDate ")}
+         }
     }
-     fun updateAppointmentDate(visitDate: VisitDate) = viewModelScope.launch{
-       // repo.addVisit(visitDate)
+     fun updateAppointmentDate(visitDate: VisitDate) {
+         viewModelScope.launch{
+             try{
+                 if(visitDate.id != 0)
+                     repo.updateAppointmentDate(visitDate)
+                 else
+                     repo.addVisit(visitDate)
+             } catch (e : Exception){ Log.e("Error", "on create or update AppointmentDate ")}
+
+         }
     }
 
-    suspend fun saveVisit(visitDate: VisitDate) = viewModelScope.launch{
-        repo.addVisit(visitDate)
+    fun clearDate(type:DateType) {
+        val id = dateVisitUI.value.id
+            if (id != null) {
+                viewModelScope.launch{
+                try {
+                    repo.clearDate(id, type)
+                    ClearUI(type)
+                }
+                catch (e: Exception) { Log.e("DT", "clearDate: error clearing date", e) }
+                }
+            }
+            else { Log.w("DT", "clearDate: was null") }
     }
+    fun ClearUI(type:DateType) {
 
+        when(type) {
+            DateType.DONE -> dateVisitUI.value = dateVisitUI.value.copy(doneDate = null)
+            DateType.PREDICTED -> dateVisitUI.value = dateVisitUI.value.copy(predictedDate = null)
+            DateType.APPOITMENT -> dateVisitUI.value = dateVisitUI.value.copy(appointmentDate = null)
+        }
+    }
 
 }

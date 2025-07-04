@@ -18,13 +18,22 @@ interface VisitDateDao {
     @Insert()
     suspend fun insert(visitDate: VisitDate)
 
-    @Query("UPDATE visitDate set doneDate = :date and foreignId = :foreignId  where id = :id")
+    @Query("UPDATE visitDate set doneDate = :date where id = :id and foreignId = :foreignId")
     suspend fun updateDoneDate(id: Int, date: Long?, foreignId: Int?)
 
-    @Query("UPDATE visitDate set predictedDate = :date where id = :id")
-    suspend fun updatePredictedDate( id : Int, date: Long)
+    @Query("UPDATE visitDate set predictedDate = :date where id = :id and foreignId = :foreignId")
+    suspend fun updatePredictedDate(id: Int, date: Long?, foreignId: Int?)
 
-    @Query("UPDATE visitDate set appointmentDate = :date where id = :id")
-    suspend fun updateAppointmentDate( id : Int, date: Long)
+    @Query("UPDATE visitDate set appointmentDate = :date where id = :id and foreignId = :foreignId")
+    suspend fun updateAppointmentDate(id: Int, date: Long?, foreignId: Int?)
+
+    @Query("UPDATE visitDate set doneDate = NULL where id = :id")
+    suspend fun clearDoneDate(id: Int)
+
+    @Query("UPDATE visitDate set predictedDate = NULL where id = :id")
+    suspend fun clearPredictedDate(id: Int)
+
+    @Query("UPDATE visitDate set appointmentDate = NULL where id = :id")
+    suspend fun clearAppointmentDate(id: Int)
 
 }

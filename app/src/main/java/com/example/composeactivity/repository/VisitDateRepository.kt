@@ -1,5 +1,6 @@
 package com.example.composeactivity.repository
 
+import com.example.composeactivity.compose.DateType
 import com.example.composeactivity.compose.VisitType
 import com.example.composeactivity.data.dao.VisitDateDao
 import com.example.composeactivity.data.entity.VisitDate
@@ -15,7 +16,22 @@ class VisitDateRepository(private val dao: VisitDateDao) {
 
     suspend fun updateDoneDate(visitDate: VisitDate) = dao.updateDoneDate(visitDate.id, visitDate.doneDate,  visitDate.foreignId)
 
-    suspend fun updatePredictedDate( id : Int, date: Long) = dao.updatePredictedDate(id,date)
+    suspend fun updatePredictedDate(visitDate: VisitDate) = dao.updatePredictedDate(visitDate.id, visitDate.predictedDate,  visitDate.foreignId)
 
-    suspend fun updateAppointmentDate( id : Int, date: Long) = dao.updateAppointmentDate(id,date)
+    suspend fun updateAppointmentDate(visitDate: VisitDate) = dao.updateAppointmentDate(visitDate.id, visitDate.appointmentDate,  visitDate.foreignId)
+
+
+    suspend fun clearDate(id: Int, type:DateType){
+        when(type) {
+            DateType.DONE -> {
+                dao.clearDoneDate(id)
+            }
+            DateType.PREDICTED -> {
+                dao.clearPredictedDate(id)
+            }
+            DateType.APPOITMENT -> {
+                dao.clearAppointmentDate(id)
+            }
+        }
+    }
 }
