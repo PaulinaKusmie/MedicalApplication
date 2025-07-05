@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,7 +38,9 @@ import com.example.composeactivity.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExaminationScreen(navController: NavController,viewModel : ExaminationViewModel = viewModel()) {
+fun ExaminationScreen(navController: NavController,
+                      onBack: () -> Unit,
+                      viewModel : ExaminationViewModel = viewModel()) {
     val examinations by viewModel.examinations.observeAsState(initial = emptyList())
 
 
@@ -44,7 +50,12 @@ fun ExaminationScreen(navController: NavController,viewModel : ExaminationViewMo
                 title = { Text("Lista badań") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MainColor
-                )
+                ),
+                        navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Powrót", tint = Color.Black)
+                    }
+                },
             )
         },
         containerColor = MainColor

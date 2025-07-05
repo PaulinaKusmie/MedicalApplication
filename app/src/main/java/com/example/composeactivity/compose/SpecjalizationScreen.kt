@@ -73,15 +73,15 @@ fun SpecjalizationScreen(
                 title = { Text("Lista wizyt") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MainColor
-                )
+                ),  navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Powrót", tint = Color.Black)
+                    }
+                },
             )
 
         },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Powrót", tint = Color.Black)
-            }
-        },
+
         containerColor = MainColor
 
     ) { padding ->

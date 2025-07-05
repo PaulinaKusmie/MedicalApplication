@@ -25,10 +25,14 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController)
                         }
                         composable("ExaminationScreen") {
-                            ExaminationScreen(navController)
+                            ExaminationScreen(
+                                navController,
+                                onBack = {navController.popBackStack() })
                         }
                         composable("SpecjalizationScreen") {
-                            SpecjalizationScreen(navController)
+                            SpecjalizationScreen(
+                                navController,
+                                onBack = {navController.popBackStack() } )
                         }
 
                         composable(route = "AddEditVisitSpecjalization/{specjalizationId},{name}",
