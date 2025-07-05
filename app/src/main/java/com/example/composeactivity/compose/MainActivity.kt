@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                             val name = it.arguments?.getString("name")!!
                             DataAddEditScreen(
                                 entryMode = EntryMode.AddSpecjalizationVisit(id, name),
-                                onSaved = { navController.popBackStack() })
+                                onBack = { navController.popBackStack() })
                         }
 
                         composable(route = "AddEditVisitExamination/{examinationId},{name}",
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                             val name = it.arguments?.getString("name")!!
                             DataAddEditScreen(
                                 entryMode = EntryMode.AddSpecjalizationVisit(id, name),
-                                onSaved = { navController.popBackStack() })
+                                onBack = { navController.popBackStack() })
                         }
                     }
                 }

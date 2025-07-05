@@ -57,8 +57,6 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
     }
 
 
-
-
      fun updateDoneDate(visitDate: VisitDate) {
          viewModelScope.launch {
              try{

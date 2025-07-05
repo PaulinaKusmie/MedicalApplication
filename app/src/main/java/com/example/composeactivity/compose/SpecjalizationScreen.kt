@@ -1,5 +1,6 @@
 package com.example.composeactivity.compose
 
+import android.R.attr.navigationIcon
 import android.widget.AdapterView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,7 +11,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,7 +44,10 @@ import com.example.composeactivity.viewmodel.SpecjalizationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpecjalizationScreen(  navController: NavController,viewModel : SpecjalizationViewModel = viewModel()) {
+fun SpecjalizationScreen(
+    navController: NavController,
+    onBack: () -> Unit,
+    viewModel : SpecjalizationViewModel = viewModel()) {
     val specjalizations by viewModel.specjalizations.observeAsState(initial = emptyList())
 
 //    val specjalizacje = listOf(
@@ -67,6 +75,12 @@ fun SpecjalizationScreen(  navController: NavController,viewModel : Specjalizati
                     containerColor = MainColor
                 )
             )
+
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Powrót", tint = Color.Black)
+            }
         },
         containerColor = MainColor
 

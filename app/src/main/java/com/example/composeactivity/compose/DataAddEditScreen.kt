@@ -50,11 +50,9 @@ import java.time.LocalDateTime
 @Composable
 fun DataAddEditScreen(
     entryMode: EntryMode,
-    onSaved: () -> Unit,
+    onBack: () -> Unit,
     viewModel: VisitDateViewModel = viewModel(),
 ) {
-   // val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-
     LaunchedEffect(entryMode) {
         viewModel.setMode(mode = entryMode)
     }
@@ -75,9 +73,7 @@ fun DataAddEditScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        //backDispatcher?.onBackPressed()
-                    }) {
+                    IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Powrót", tint = Color.Black)
                     }
                 },
