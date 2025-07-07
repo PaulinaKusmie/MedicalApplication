@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.kapt")
-
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -55,6 +55,9 @@ dependencies {
 
     val room_version = "2.6.1"
     val nav_version = "2.9.0"
+
+
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
 
     implementation(libs.wheelPickerCompose)
 
