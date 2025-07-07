@@ -33,26 +33,33 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
 
     fun setMode(mode: EntryMode) {
         viewModelScope.launch {
-            when (mode) {
-                is EntryMode.AddSpecjalizationVisit -> {
-                    val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, VisitType.SPECIALIZATION)
-                    val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.specjalizationId, type = VisitType.SPECIALIZATION)
-                    dateVisitUI.value = uiState.copy(name = mode.name)
+            try {
+                when (mode) {
 
+                    is EntryMode.AddSpecjalizationVisit -> {
+                        val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, VisitType.SPECIALIZATION)
+                        val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.specjalizationId, type = VisitType.SPECIALIZATION)
+                        dateVisitUI.value = uiState.copy(name = mode.name)
+
+                    }
+
+                    is EntryMode.AddExaminationVisit -> {
+                        val visitDate: VisitDate? = getVisitDate(mode.examinationId, VisitType.EXAMINATION)
+                        val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.examinationId, type = VisitType.EXAMINATION)
+                        dateVisitUI.value = uiState.copy(name = mode.name)
+
+                    }
                 }
-
-                is EntryMode.AddExaminationVisit -> {
-                    val visitDate: VisitDate? = getVisitDate(mode.examinationId, VisitType.EXAMINATION)
-                    val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.examinationId, type = VisitType.EXAMINATION)
-                    dateVisitUI.value = uiState.copy(name = mode.name)
-
-                }
+            } catch (e : Exception) {
+                Log.e("Error", "Fail loaded data")
             }
         }
+
     }
 
 
     suspend fun getVisitDate(id: Int, type :VisitType): VisitDate? = withContext(Dispatchers.IO) {
+
         return@withContext repo.getVisitDate(id,type)
     }
 
@@ -102,6 +109,7 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
             }
             else { Log.w("DT", "clearDate: was null") }
     }
+
     fun ClearUI(type:DateType) {
 
         when(type) {
