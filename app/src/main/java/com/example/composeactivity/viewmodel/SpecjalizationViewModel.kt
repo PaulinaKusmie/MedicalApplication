@@ -7,7 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 
 import com.example.composeactivity.data.AppDatabase
-import com.example.composeactivity.data.entity.Examination
+
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.SpecjalizationRepository
 import kotlinx.coroutines.launch
@@ -24,6 +24,9 @@ class SpecjalizationViewModel(application: Application) : AndroidViewModel(appli
              } catch (e : Exception){ Log.e("Error", "Fail updated active state specjalization") }
 
         }
+
+
+
 
         fun addSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
             try {

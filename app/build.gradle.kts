@@ -1,5 +1,3 @@
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -57,7 +55,8 @@ dependencies {
     val nav_version = "2.9.0"
 
 
-    implementation("com.google.firebase:firebase-messaging:24.0.0")
+    implementation(platform(libs.firebase.bom)) // ✅ BOM
+    implementation(libs.firebase.messaging)     // ✅ Messaging
 
     implementation(libs.wheelPickerCompose)
 
@@ -79,7 +78,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
 
 
