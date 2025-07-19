@@ -17,20 +17,10 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val channelId = "my_channel_id"
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                channelId,
-//                "Mój kanał powiadomień",
-//                NotificationManager.IMPORTANCE_HIGH
-//            )
-//            val notificationManager = context.getSystemService(NotificationManager::class.java)
-//            notificationManager.createNotificationChannel(channel)
-//        }
-
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.medical) // zamień na własną ikonę
-            .setContentTitle("Przypomnienie")
-            .setContentText("To jest Twoje zaplanowane powiadomienie!")
+            .setContentTitle("Twoja wizyta")
+            .setContentText("Czu już umówiłeś swoją wizytę do!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
 

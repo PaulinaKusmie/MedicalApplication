@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
+import com.example.composeactivity.viewmodel.Converter
 import com.example.composeactivity.viewmodel.NotificationReceiver
 
 object  NotificationUtils {
@@ -28,7 +29,7 @@ object  NotificationUtils {
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    fun scheduleNotification( context: Context, year: Int, month: Int, day: Int, hour: Int, minute: Int) {
+    fun scheduleNotification( context: Context, dateLong: Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
@@ -38,12 +39,14 @@ object  NotificationUtils {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        var targetDate = Converter.longToLocalDateTime(dateLong)!!
+
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month - 1) // miesiące zaczynają się od 0
-            set(Calendar.DAY_OF_MONTH, day)
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
+            set(Calendar.YEAR, targetDate.year )
+            set(Calendar.MONTH, targetDate.monthValue - 1) // miesiące zaczynają się od 0
+            set(Calendar.DAY_OF_MONTH, targetDate.dayOfMonth)
+            set(Calendar.HOUR_OF_DAY,  targetDate.hour)
+            set(Calendar.MINUTE,  targetDate.minute)
             set(Calendar.SECOND, 0)
         }
 

@@ -56,6 +56,11 @@ fun MainScreen(navController: NavController) {
                 GenerateButton("Badania medyczne") {
                     navController.navigate("SpecjalizationScreen")
                 }
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(modifier = Modifier.height(80.dp).width(310.dp),
+                    onClick = { navController.navigate("ConfigurationScreen") }){
+                    Text("Ustawienia")
+                }
             }
         }
     }

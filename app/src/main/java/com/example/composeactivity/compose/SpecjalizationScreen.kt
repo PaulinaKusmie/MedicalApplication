@@ -48,21 +48,21 @@ fun SpecjalizationScreen(
     viewModel : SpecjalizationViewModel = viewModel()) {
     val specjalizations by viewModel.specjalizations.observeAsState(initial = emptyList())
 
-//    val specjalizacje = listOf(
-//        Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 2, name = "Lekarz rodzinny", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 3, name = "Kardiolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 4, name = "Dermatolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 5, name = "Psychiatra", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 6, name = "Ortopeda", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 7, name = "Endokrynolog", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 8, name = "Gastroenterolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 9, name = "Neurolog", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 10, name = "Reumatolog", isActive = true, sex = 0, isPay = false)
-//    )
-//
-//
-//    specjalizacje.forEach { i ->viewModel.addSpecjalization(i) }
+    val specjalizacje = listOf(
+        Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),
+        Specjalization(id = 2, name = "Lekarz rodzinny", isActive = true, sex = 0, isPay = false),
+        Specjalization(id = 3, name = "Kardiolog", isActive = true, sex = 0, isPay = true),
+        Specjalization(id = 4, name = "Dermatolog", isActive = true, sex = 0, isPay = true),
+        Specjalization(id = 5, name = "Psychiatra", isActive = true, sex = 0, isPay = false),
+        Specjalization(id = 6, name = "Ortopeda", isActive = true, sex = 0, isPay = true),
+        Specjalization(id = 7, name = "Endokrynolog", isActive = true, sex = 0, isPay = false),
+        Specjalization(id = 8, name = "Gastroenterolog", isActive = true, sex = 0, isPay = true),
+        Specjalization(id = 9, name = "Neurolog", isActive = true, sex = 0, isPay = false),
+        Specjalization(id = 10, name = "Reumatolog", isActive = true, sex = 0, isPay = false)
+    )
+
+
+    //specjalizacje.forEach { i ->viewModel.addSpecjalization(i) }
 
    // MyScreen()
     Scaffold(

@@ -20,7 +20,6 @@ class VisitDateRepository(private val dao: VisitDateDao) {
 
     suspend fun updateAppointmentDate(visitDate: VisitDate) = dao.updateAppointmentDate(visitDate.id, visitDate.appointmentDate,  visitDate.foreignId)
 
-
     suspend fun clearDate(id: Int, type:DateType){
         when(type) {
             DateType.DONE -> {
@@ -34,4 +33,6 @@ class VisitDateRepository(private val dao: VisitDateDao) {
             }
         }
     }
+
+    suspend fun getVisitDateByDate(startPredictedDate: Long, endPredictedDate: Long) = dao.getVisitDateByDate(startPredictedDate,endPredictedDate )
 }

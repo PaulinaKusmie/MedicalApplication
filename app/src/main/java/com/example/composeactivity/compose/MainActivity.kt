@@ -1,6 +1,7 @@
 package com.example.composeactivity.compose
 
 import android.icu.util.Calendar
+import android.icu.util.TimeUnit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,10 +11,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.utils.DailyNotificationWorker
 import com.example.composeactivity.utils.NotificationUtils
+import com.example.composeactivity.viewmodel.Converter
+import java.sql.Time
+import java.time.Duration
+import java.time.LocalDateTime
 
 
 class MainActivity : ComponentActivity() {
@@ -23,19 +31,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         NotificationUtils.createNotificationChannel(this)
 
-        val myWorkRequest = DailyNotificationWorker(this, null)
-        WorkManager.getInstance(this).enqueue(myWorkRequest)
 
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MINUTE, 1)
-        NotificationUtils.scheduleNotification(this,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH),
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE)
+
+        var myWorkRequest = PeriodicWorkRequestBuilder<DailyNotificationWorker>(Duration.ofMinutes(1)).build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "daily_notification",
+            ExistingPeriodicWorkPolicy.KEEP,
+            myWorkRequest
         )
-
 
 
         setContent {
@@ -52,6 +56,11 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("SpecjalizationScreen") {
                         SpecjalizationScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
+                    composable("ConfigurationScreen") {
+                        ConfigurationScreen(
                             navController,
                             onBack = { navController.popBackStack() })
                     }

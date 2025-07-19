@@ -15,6 +15,7 @@ import com.example.composeactivity.compose.VisitType
 import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.VisitDate
 import com.example.composeactivity.repository.VisitDateRepository
+import com.example.composeactivity.utils.NotificationUtils
 import com.example.composeactivity.viewmodel.Converter
 import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toUiState
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,9 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
 
     fun setMode(mode: EntryMode) {
         viewModelScope.launch {
+
+
+
             try {
                 when (mode) {
 
@@ -59,7 +63,6 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
 
 
     suspend fun getVisitDate(id: Int, type :VisitType): VisitDate? = withContext(Dispatchers.IO) {
-
         return@withContext repo.getVisitDate(id,type)
     }
 
@@ -97,7 +100,7 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
     }
 
     fun clearDate(type:DateType) {
-        val id = dateVisitUI.value.id
+        var id = dateVisitUI.value.id
             if (id != null) {
                 viewModelScope.launch{
                 try {

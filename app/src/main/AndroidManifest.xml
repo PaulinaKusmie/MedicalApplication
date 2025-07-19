@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -16,9 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeActivity"
         tools:targetApi="31">
+        <activity
+            android:name=".compose.ConfigurationMain"
+            android:exported="false"
+            android:label="@string/title_activity_configuration_main"
+            android:theme="@style/Theme.ComposeActivity" />
+
         <receiver
             android:name=".viewmodel.NotificationReceiver"
             android:exported="true" />
+
         <activity
             android:name=".compose.ui.theme.Utility"
             android:exported="false"
@@ -45,6 +53,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="true">
@@ -52,9 +61,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="default_channel"/>
+            android:value="default_channel" />
     </application>
 
 </manifest>

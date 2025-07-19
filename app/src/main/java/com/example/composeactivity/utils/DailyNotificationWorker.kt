@@ -3,14 +3,32 @@ package com.example.composeactivity.utils
 
 import android.content.Context
 import android.icu.util.Calendar
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.example.composeactivity.data.AppDatabase
+import com.example.composeactivity.data.entity.VisitDate
+import com.example.composeactivity.repository.VisitDateRepository
+import com.example.composeactivity.viewmodel.Converter
+import java.time.LocalDateTime
 
 class DailyNotificationWorker(context : Context, params: WorkerParameters) :
-androidx.work.Worker(context, params){
+    CoroutineWorker(context, params){
 
-    override fun doWork(): Result {
-        NotificationUtils.
+    override suspend fun doWork(): Result {
+        val database = (AppDatabase.get(applicationContext)).visitDateDao()
 
+        val dupa = Converter.localDateTimeToLong(LocalDateTime.now())
+
+        val startOfDay = Converter.localDateTimeToLong(LocalDateTime.now().toLocalDate().atStartOfDay())
+        val endOfDay = Converter.localDateTimeToLong(LocalDateTime.now().toLocalDate().atTime(23, 59, 59))
+
+        var visitDate : List<Long> = database.getVisitDateByDate(startOfDay, endOfDay)
+
+        visitDate.forEach {
+            NotificationUtils.scheduleNotification(applicationContext,it)
+        }
+
+        return Result.success()
     }
 }
