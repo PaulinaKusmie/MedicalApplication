@@ -37,8 +37,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.commandiron.wheel_picker_compose.WheelDateTimePicker
-import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
+import com.example.composeactivity.compose.Tools.DateType
+import com.example.composeactivity.compose.Tools.EntryMode
+import com.example.composeactivity.compose.Tools.WheelPickerDemo
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.Converter
 import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toEntity
@@ -144,16 +145,19 @@ fun DataAddEditScreen(
                                 dateVisitState.doneDate = Converter.localDateTimeToLong(it)
                                 viewModel.updateDoneDate(dateVisitState.toEntity())
                             }
+
                             DateType.PREDICTED -> pickedDate.value?.let {
 
                                 dateVisitState.predictedDate = Converter.localDateTimeToLong(it)
                                 viewModel.updatePredictedDate(dateVisitState.toEntity())
                             }
+
                             DateType.APPOITMENT -> pickedDate.value?.let {
 
                                 dateVisitState.appointmentDate = Converter.localDateTimeToLong(it)
                                 viewModel.updateAppointmentDate(dateVisitState.toEntity())
                             }
+
                             null -> {}
                         }
                         editingType.value = null

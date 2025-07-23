@@ -5,24 +5,18 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.example.composeactivity.compose.DateType
-import com.example.composeactivity.compose.EntryMode
+import com.example.composeactivity.compose.Tools.DateType
+import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
-import com.example.composeactivity.compose.VisitType
+import com.example.composeactivity.compose.Tools.VisitType
 import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.VisitDate
 import com.example.composeactivity.repository.VisitDateRepository
-import com.example.composeactivity.utils.NotificationUtils
-import com.example.composeactivity.viewmodel.Converter
 import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 
 class VisitDateViewModel (application: Application) : AndroidViewModel(application)  {
     private val repo =  VisitDateRepository(AppDatabase.get(application).visitDateDao())

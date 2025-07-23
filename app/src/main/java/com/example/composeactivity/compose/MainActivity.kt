@@ -1,7 +1,5 @@
 package com.example.composeactivity.compose
 
-import android.icu.util.Calendar
-import android.icu.util.TimeUnit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,14 +12,11 @@ import androidx.navigation.navArgument
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.composeactivity.data.AppDatabase
+import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.utils.DailyNotificationWorker
 import com.example.composeactivity.utils.NotificationUtils
-import com.example.composeactivity.viewmodel.Converter
-import java.sql.Time
 import java.time.Duration
-import java.time.LocalDateTime
 
 
 class MainActivity : ComponentActivity() {

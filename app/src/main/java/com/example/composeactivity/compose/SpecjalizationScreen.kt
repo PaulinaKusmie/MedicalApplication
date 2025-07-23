@@ -1,10 +1,7 @@
 package com.example.composeactivity.compose
 
-import android.R.attr.navigationIcon
-import android.widget.AdapterView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import com.example.composeactivity.compose.MainActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,12 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.composeactivity.compose.Tools.GradientSwitch
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.SpecjalizationViewModel

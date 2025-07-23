@@ -1,23 +1,22 @@
-package com.example.composeactivity.compose
-import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.icu.util.Calendar
-import android.util.Log
+package com.example.composeactivity.compose.Tools
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -33,26 +32,9 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
-import com.example.composeactivity.viewmodel.NotificationReceiver
-import java.time.Instant
+import com.example.composeactivity.compose.DropdownMenuBoxTime
 import java.time.LocalDateTime
-import java.time.ZoneId
 
-sealed class EntryMode {
-    data class AddSpecjalizationVisit(val specjalizationId: Int, val name : String) : EntryMode()
-    data class AddExaminationVisit(val examinationId: Int, val name : String) : EntryMode()
-}
-
-enum class DateType {
-    DONE,
-    PREDICTED,
-    APPOITMENT
-}
-
-enum class VisitType {
-    SPECIALIZATION,
-    EXAMINATION
-}
 
 @Composable
 fun GradientSwitch(
@@ -144,4 +126,69 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
 }
 
 
+@Composable
+fun CounterWithDropdown (
+      inputValue : Int,
+      typeOfTime : TimeType) : Pair<Integer, TimeType>  {
 
+    var value by remember { mutableStateOf(0) }
+    value = inputValue
+
+    Column(
+        modifier = Modifier
+            .padding(5.dp)
+    ) {
+
+        Row {
+            TextField( value = value.toString(),
+                onValueChange = { },
+                modifier = Modifier.width(90.dp)
+                    .padding(1.dp,1.dp, 5.dp, 1.dp),
+                enabled = true,
+                readOnly = true)
+            Column (modifier = Modifier) {
+                Button(modifier = Modifier.height(25.dp),onClick = { value += 1}) { Text("+") }
+                Button(modifier = Modifier.height(25.dp), onClick = {value -= 1}) {Text("-") }
+            }
+            DropdownMenuBoxTime()
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuBoxTime()
+{
+    var expanded by remember{ mutableStateOf(value = false) }
+    var options = listOf("Godziny","Dni","Tygodnie","Miesiące" )
+    var selectedOptions by remember{ mutableStateOf(options[0]) }
+
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded})
+    {
+        TextField(
+            value = selectedOptions,
+            onValueChange = { },
+            readOnly = false,
+            label = { Text("$selectedOptions")},
+            modifier = Modifier.menuAnchor()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded  = false},
+
+            ){
+            options.forEach { options ->
+                DropdownMenuItem(
+                    text = { Text(options) },
+                    onClick = {
+                        selectedOptions = options
+                        expanded = false},
+                )
+            }
+        }
+    }
+}

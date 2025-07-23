@@ -3,7 +3,7 @@ package com.example.composeactivity.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.composeactivity.compose.VisitType
+import com.example.composeactivity.compose.Tools.VisitType
 import com.example.composeactivity.data.entity.VisitDate
 import kotlinx.coroutines.flow.Flow
 

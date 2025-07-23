@@ -1,7 +1,6 @@
 package com.example.composeactivity.compose.UIStateObject
 
-import com.example.composeactivity.compose.VisitType
-import com.example.composeactivity.data.entity.VisitDate
+import com.example.composeactivity.compose.Tools.VisitType
 
 data class VisitDateUiState(
     val id: Int = -1,

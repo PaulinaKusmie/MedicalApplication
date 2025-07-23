@@ -1,7 +1,7 @@
 package com.example.composeactivity.repository
 
-import com.example.composeactivity.compose.DateType
-import com.example.composeactivity.compose.VisitType
+import com.example.composeactivity.compose.Tools.DateType
+import com.example.composeactivity.compose.Tools.VisitType
 import com.example.composeactivity.data.dao.VisitDateDao
 import com.example.composeactivity.data.entity.VisitDate
 import kotlinx.coroutines.flow.Flow
