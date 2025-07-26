@@ -9,7 +9,6 @@ import java.util.UUID
 class SpecjalizationRepository(private val dao: SpecjalizationDao) {
 
 
-    //DateSpecjalizationScreen
     val allSpecjalization :Flow<List<Specjalization>> = dao.getSpecjalization();
 
     suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)

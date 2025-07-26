@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -32,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
-import com.example.composeactivity.compose.DropdownMenuBoxTime
 import java.time.LocalDateTime
 
 
@@ -129,36 +129,38 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
 @Composable
 fun CounterWithDropdown (
       inputValue : Int,
-      typeOfTime : TimeType) : Pair<Integer, TimeType>  {
+      typeOfTime : TimeType) : Pair<Int, TimeType>  {
 
-    var value by remember { mutableStateOf(0) }
-    value = inputValue
-
+   var Value = inputValue
+    VAR
     Column(
         modifier = Modifier
             .padding(5.dp)
     ) {
 
         Row {
-            TextField( value = value.toString(),
+            TextField( value = Value.toString(),
                 onValueChange = { },
                 modifier = Modifier.width(90.dp)
                     .padding(1.dp,1.dp, 5.dp, 1.dp),
                 enabled = true,
                 readOnly = true)
             Column (modifier = Modifier) {
-                Button(modifier = Modifier.height(25.dp),onClick = { value += 1}) { Text("+") }
-                Button(modifier = Modifier.height(25.dp), onClick = {value -= 1}) {Text("-") }
+                Button(modifier = Modifier.height(35.dp),onClick = { Value += 1}) { Text("+") }
+                Button(modifier = Modifier.height(35.dp), onClick = {Value -= 1}) {Text("-") }
             }
-            DropdownMenuBoxTime()
+            DropdownMenuBoxTime(typeOfTime)
         }
     }
+
+    //var selectedPair : Pair<Int, TimeType> =
+    return  Pair(inputValue,typeOfTime);
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuBoxTime()
+fun DropdownMenuBoxTime(typeOfTime : TimeType) : TimeType
 {
     var expanded by remember{ mutableStateOf(value = false) }
     var options = listOf("Godziny","Dni","Tygodnie","Miesiące" )
@@ -192,3 +194,4 @@ fun DropdownMenuBoxTime()
         }
     }
 }
+

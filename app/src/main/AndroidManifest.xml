@@ -18,6 +18,11 @@
         android:theme="@style/Theme.ComposeActivity"
         tools:targetApi="31">
         <activity
+            android:name=".compose.ReminderScreen"
+            android:exported="false"
+            android:label="@string/title_activity_reminder_screen"
+            android:theme="@style/Theme.ComposeActivity" />
+        <activity
             android:name=".compose.ConfigurationMain"
             android:exported="false"
             android:label="@string/title_activity_configuration_main"

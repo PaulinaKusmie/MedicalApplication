@@ -1,47 +1,34 @@
 package com.example.composeactivity.compose
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuBoxScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.composeactivity.compose.Tools.CounterWithDropdown
-import com.example.composeactivity.compose.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.ui.theme.MainColor
-import com.example.composeactivity.viewmodel.SpecjalizationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +54,42 @@ fun ConfigurationScreen(
         },
         containerColor = MainColor
     ) {
-        CounterWithDropdown()
+
+       padding ->
+       Column(modifier = Modifier
+           .padding(padding).padding(vertical = 20.dp, horizontal = 20.dp)) {
+           val switchGradient = Brush.linearGradient(
+               colors = listOf(Color(0xFF6E48AA), Color(0xFF9D50BB))
+           )
+           Card(modifier = Modifier
+               .background(MainColor)
+               .border(1.dp, brush = switchGradient, shape = RoundedCornerShape(15.dp))
+               .fillMaxWidth(),
+               onClick = { navController.navigate("ReminderScreen") }
+           ) {
+               Text(modifier = Modifier
+                   .background(MainColor)
+                   .fillMaxWidth(),
+                   textAlign = TextAlign.Center,
+                   text = "Przypomnienia")
+           }
+           Spacer(modifier = Modifier.height(20.dp))
+           Card(
+               modifier = Modifier
+                   .background(MainColor)
+                   .border(1.dp,  brush = switchGradient, shape = RoundedCornerShape(15.dp))
+                   .fillMaxWidth(),
+
+               onClick = {}
+
+           ) {
+               Text(modifier = Modifier
+                   .background(MainColor)
+                   .fillMaxWidth(),
+                   text = "Dodaj aktywność",
+                   textAlign = TextAlign.Center)
+           }
+       }
     }
 }
 

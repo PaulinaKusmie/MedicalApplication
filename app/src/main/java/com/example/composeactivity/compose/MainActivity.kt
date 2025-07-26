@@ -59,7 +59,11 @@ class MainActivity : ComponentActivity() {
                             navController,
                             onBack = { navController.popBackStack() })
                     }
-
+                    composable("ReminderScreen") {
+                        ReminderScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
                     composable(
                         route = "AddEditVisitSpecjalization/{specjalizationId},{name}",
                         arguments = listOf(
