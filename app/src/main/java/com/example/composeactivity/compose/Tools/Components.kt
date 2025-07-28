@@ -129,42 +129,43 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
 @Composable
 fun CounterWithDropdown (
       inputValue : Int,
-      typeOfTime : TimeType) : Pair<Int, TimeType>  {
+      typeOfTime :  Int) : Pair<Int, Int>  {
 
-   var Value = inputValue
-    VAR
+     var value = inputValue
+     var type = typeOfTime
     Column(
         modifier = Modifier
             .padding(5.dp)
     ) {
 
         Row {
-            TextField( value = Value.toString(),
+            TextField( value = value.toString(),
                 onValueChange = { },
                 modifier = Modifier.width(90.dp)
                     .padding(1.dp,1.dp, 5.dp, 1.dp),
                 enabled = true,
                 readOnly = true)
             Column (modifier = Modifier) {
-                Button(modifier = Modifier.height(35.dp),onClick = { Value += 1}) { Text("+") }
-                Button(modifier = Modifier.height(35.dp), onClick = {Value -= 1}) {Text("-") }
+                Button(modifier = Modifier.height(35.dp),onClick = { value += 1}) { Text("+") }
+                Button(modifier = Modifier.height(35.dp), onClick = {value -= 1}) {Text("-") }
             }
-            DropdownMenuBoxTime(typeOfTime)
+             DropdownMenuBoxTime(typeOfTime, onSelectionChange = {
+                 val dupa = it
+             })
         }
     }
 
-    //var selectedPair : Pair<Int, TimeType> =
-    return  Pair(inputValue,typeOfTime);
+    return  Pair(value,type);
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuBoxTime(typeOfTime : TimeType) : TimeType
+fun DropdownMenuBoxTime(typeOfTime : Int, onSelectionChange: (Int) -> Unit)
 {
     var expanded by remember{ mutableStateOf(value = false) }
     var options = listOf("Godziny","Dni","Tygodnie","Miesiące" )
-    var selectedOptions by remember{ mutableStateOf(options[0]) }
+    var selectedIndex  by remember{ mutableStateOf(typeOfTime.coerceIn(options.indices))  }
 
 
     ExposedDropdownMenuBox(
@@ -172,10 +173,10 @@ fun DropdownMenuBoxTime(typeOfTime : TimeType) : TimeType
         onExpandedChange = { expanded = !expanded})
     {
         TextField(
-            value = selectedOptions,
+            value = options[selectedIndex],
             onValueChange = { },
-            readOnly = false,
-            label = { Text("$selectedOptions")},
+            readOnly = true,
+            label = { Text("Jednostka czasu")},
             modifier = Modifier.menuAnchor()
         )
         ExposedDropdownMenu(
@@ -183,15 +184,17 @@ fun DropdownMenuBoxTime(typeOfTime : TimeType) : TimeType
             onDismissRequest = { expanded  = false},
 
             ){
-            options.forEach { options ->
+            options.forEachIndexed  { index, option ->
                 DropdownMenuItem(
-                    text = { Text(options) },
+                    text = { Text(option) },
                     onClick = {
-                        selectedOptions = options
+                        selectedIndex = index
+                        onSelectionChange(index)
                         expanded = false},
                 )
             }
         }
     }
+
 }
 

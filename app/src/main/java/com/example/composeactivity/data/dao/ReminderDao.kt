@@ -16,7 +16,7 @@ interface ReminderDao {
     fun getReminder() : Flow<List<Reminder>>
 
     @Query("UPDATE reminder set countReminder = :countReminder, TypeOfTime = :typeOfTime where id = :id")
-    suspend fun updateReminder( id : Int, countReminder: Int, typeOfTime: TimeType)
+    suspend fun updateReminder( id : Int, countReminder: Int, typeOfTime: Int)
 
     @Insert()
     suspend fun insert(reminder: Reminder)

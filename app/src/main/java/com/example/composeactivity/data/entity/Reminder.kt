@@ -8,6 +8,6 @@ import com.example.composeactivity.compose.Tools.TimeType
 data class Reminder(
     @PrimaryKey val id: Int,
     val countReminder: Int = 0,
-    val TypeOfTime: TimeType)
+    val TypeOfTime: Int = 0)
 
 

@@ -56,7 +56,20 @@ fun ReminderScreen( navController: NavController,
             padding ->
         Column(modifier = Modifier
             .padding(padding).padding(vertical = 20.dp, horizontal = 20.dp)) {
-            CounterWithDropdown(1, TimeType.DAY)
+
+            val TimeTypeInt = 0;
+            val mode = TimeType.DAY
+            when(mode) {
+                TimeType.HOUR -> 0
+                TimeType.DAY -> 1
+                TimeType.WEEK -> 2
+                TimeType.MONTH -> 3
+            }
+
+
+            CounterWithDropdown(1,TimeTypeInt)
+
+            CounterWithDropdown(4,TimeTypeInt)
         }
     }
 }
