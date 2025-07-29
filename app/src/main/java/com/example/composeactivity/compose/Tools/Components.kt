@@ -131,23 +131,24 @@ fun CounterWithDropdown (
       inputValue : Int,
       typeOfTime :  Int) : Pair<Int, Int>  {
 
-     var value = inputValue
-     var type = typeOfTime
+     var valuee by remember { mutableStateOf(inputValue) }
+     var type by remember { mutableStateOf(typeOfTime) }
+
     Column(
         modifier = Modifier
             .padding(5.dp)
     ) {
 
         Row {
-            TextField( value = value.toString(),
+            TextField( value = valuee.toString(),
                 onValueChange = { },
                 modifier = Modifier.width(90.dp)
                     .padding(1.dp,1.dp, 5.dp, 1.dp),
                 enabled = true,
                 readOnly = true)
             Column (modifier = Modifier) {
-                Button(modifier = Modifier.height(35.dp),onClick = { value += 1}) { Text("+") }
-                Button(modifier = Modifier.height(35.dp), onClick = {value -= 1}) {Text("-") }
+                Button(modifier = Modifier.height(35.dp),onClick = { valuee += 1}) { Text("+") }
+                Button(modifier = Modifier.height(35.dp), onClick = {valuee -= 1}) {Text("-") }
             }
              DropdownMenuBoxTime(typeOfTime, onSelectionChange = {
                  val dupa = it
@@ -155,7 +156,7 @@ fun CounterWithDropdown (
         }
     }
 
-    return  Pair(value,type);
+    return  Pair(valuee,type);
 }
 
 

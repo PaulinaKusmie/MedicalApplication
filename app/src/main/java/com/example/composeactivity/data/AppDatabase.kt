@@ -12,10 +12,11 @@ import com.example.composeactivity.data.dao.ReminderDao
 import com.example.composeactivity.data.dao.SpecjalizationDao
 import com.example.composeactivity.data.dao.VisitDateDao
 import com.example.composeactivity.data.entity.Examination
+import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.data.entity.VisitDate
 
-@Database(entities = [Examination::class, Specjalization::class , VisitDate::class], version = 6)
+@Database(entities = [Examination::class, Specjalization::class , VisitDate::class, Reminder::class ], version = 7)
 abstract class AppDatabase : RoomDatabase() {
     abstract  fun examinationDao(): ExaminationDao
     abstract  fun specjalizationDao(): SpecjalizationDao

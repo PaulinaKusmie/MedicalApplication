@@ -41,8 +41,8 @@ import com.example.composeactivity.ui.theme.MainColor
 @Composable
 fun ExaminationScreen(navController: NavController,
                       onBack: () -> Unit,
-                      viewModel : ExaminationViewModel = viewModel()) {
-    val examinations by viewModel.examinations.observeAsState(initial = emptyList())
+                      viewModel : ExaminationViewModel = viewModel())
+{ val examinations by viewModel.examinations.observeAsState(initial = emptyList())
 
 
     Scaffold(

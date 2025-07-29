@@ -25,9 +25,6 @@ class SpecjalizationViewModel(application: Application) : AndroidViewModel(appli
 
         }
 
-
-
-
         fun addSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
             try {
             repo.addSpecjalization(specjalization)
