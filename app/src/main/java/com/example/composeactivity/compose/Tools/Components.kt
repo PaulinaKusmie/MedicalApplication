@@ -128,8 +128,10 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
 
 @Composable
 fun CounterWithDropdown (
+      id : Int,
       inputValue : Int,
-      typeOfTime :  Int) : Pair<Int, Int>  {
+      typeOfTime :  Int ,
+      onSelectionChange: (Triple<Int, Int, Int>) -> Unit)  {
 
      var valuee by remember { mutableStateOf(inputValue) }
      var type by remember { mutableStateOf(typeOfTime) }
@@ -151,12 +153,12 @@ fun CounterWithDropdown (
                 Button(modifier = Modifier.height(35.dp), onClick = {valuee -= 1}) {Text("-") }
             }
              DropdownMenuBoxTime(typeOfTime, onSelectionChange = {
-                 val dupa = it
+                 type = it
              })
         }
     }
 
-    return  Pair(valuee,type);
+    onSelectionChange(Triple(id ,valuee, type))
 }
 
 

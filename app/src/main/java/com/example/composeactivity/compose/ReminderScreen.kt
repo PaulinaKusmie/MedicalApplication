@@ -43,6 +43,7 @@ import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.ReminderViewModel
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.asFlow
+import com.example.composeactivity.data.entity.Reminder
 import kotlinx.coroutines.flow.forEach
 
 
@@ -73,7 +74,6 @@ fun ReminderScreen( navController: NavController,
         Column(modifier = Modifier
             .padding(padding).padding(vertical = 20.dp, horizontal = 20.dp)) {
 
-           // viewModels.reminders.collect { col -> col }
             val TimeTypeInt = 0;
             val mode = TimeType.DAY
             when(mode) {
@@ -82,11 +82,23 @@ fun ReminderScreen( navController: NavController,
                 TimeType.WEEK -> 2
                 TimeType.MONTH -> 3
             }
-            //Button(modifier = Modifier.height(35.dp),onClick = { viewModels.Gogirsl()}) { Text("+") }
 
-            CounterWithDropdown(1,TimeTypeInt)
+            var chrum = Triple(0, 0, 0)
 
-            CounterWithDropdown(4,TimeTypeInt)
+
+            reminders.forEach { x -> CounterWithDropdown(x.id, x.countReminder, x.TypeOfTime, onSelectionChange = {
+                chrum = Triple(it.first, it.second, it.third)
+            }) }
+
+            //viewModels.addReminder(chrum.first, chrum.second)
+
+            Button(modifier = Modifier.height(35.dp),onClick = { }) { Text("+") }
+
+
+
+
+
+            //CounterWithDropdown(4,TimeTypeInt)
         }
     }
 
@@ -98,7 +110,6 @@ fun ReminderScreen( navController: NavController,
 @Composable
 fun MyScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
-        // ...Twoja zawartość ekranu...
 
         FloatingActionButton(
             onClick = {  },

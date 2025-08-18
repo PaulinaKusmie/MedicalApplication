@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class ReminderViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo = ReminderRepository(AppDatabase.get(application).reminderDao())
-    val reminders = repo.allReminder
+    val reminders = repo.allReminder.asLiveData()
 
 //     fun Gogirsl(){
 //        var rrr = Reminder(0, 1, 3)
