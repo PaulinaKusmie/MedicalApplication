@@ -87,12 +87,13 @@ fun ReminderScreen( navController: NavController,
 
 
             reminders.forEach { x -> CounterWithDropdown(x.id, x.countReminder, x.TypeOfTime, onSelectionChange = {
-                chrum = Triple(it.first, it.second, it.third)
+                viewModels.updateReminder(it.first, it.second, it.third)
             }) }
 
-            //viewModels.addReminder(chrum.first, chrum.second)
 
-            Button(modifier = Modifier.height(35.dp),onClick = { }) { Text("+") }
+            Button(modifier = Modifier.height(35.dp),onClick = {
+                viewModels.addReminder()
+            }) { Text("+") }
 
 
 

@@ -10,7 +10,7 @@ class ReminderRepository(private val dao: ReminderDao) {
 
     val allReminder :Flow<List<Reminder>> = dao.getReminder();
 
-    suspend fun updateActive(id : Int, countReminder: Int, typeOfTime: Int) = dao.updateReminder(id,countReminder,typeOfTime)
+    suspend fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = dao.updateReminder(id,countReminder,typeOfTime)
 
     suspend fun addReminder(reminder: Reminder) = dao.insert(reminder)
 
