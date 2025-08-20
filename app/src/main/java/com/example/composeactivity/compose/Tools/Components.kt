@@ -3,6 +3,7 @@ package com.example.composeactivity.compose.Tools
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -34,6 +35,11 @@ import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDateTime
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.unit.dp
+import com.example.composeactivity.data.entity.Reminder
 
 
 @Composable
@@ -125,79 +131,4 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
     )
 }
 
-
-@Composable
-fun CounterWithDropdown (
-      id : Int,
-      inputValue : Int,
-      typeOfTime :  Int ,
-      onSelectionChange: (Triple<Int, Int, Int>) -> Unit)  {
-
-     var valuee by remember { mutableStateOf(inputValue) }
-     var type by remember { mutableStateOf(typeOfTime) }
-
-    Column(
-        modifier = Modifier
-            .padding(5.dp)
-    ) {
-
-        Row {
-            TextField( value = valuee.toString(),
-                onValueChange = { },
-                modifier = Modifier.width(90.dp)
-                    .padding(1.dp,1.dp, 5.dp, 1.dp),
-                enabled = true,
-                readOnly = true)
-            Column (modifier = Modifier) {
-                Button(modifier = Modifier.height(35.dp),onClick = { valuee += 1}) { Text("+") }
-                Button(modifier = Modifier.height(35.dp), onClick = {valuee -= 1}) {Text("-") }
-            }
-             DropdownMenuBoxTime(typeOfTime, onSelectionChange = {
-                 type = it
-             })
-        }
-    }
-
-    onSelectionChange(Triple(id ,valuee, type))
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropdownMenuBoxTime(typeOfTime : Int, onSelectionChange: (Int) -> Unit)
-{
-    var expanded by remember{ mutableStateOf(value = false) }
-    var options = listOf("Godziny","Dni","Tygodnie","Miesiące" )
-    var selectedIndex  by remember{ mutableStateOf(typeOfTime.coerceIn(options.indices))  }
-
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded})
-    {
-        TextField(
-            value = options[selectedIndex],
-            onValueChange = { },
-            readOnly = true,
-            label = { Text("Jednostka czasu")},
-            modifier = Modifier.menuAnchor()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded  = false},
-
-            ){
-            options.forEachIndexed  { index, option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedIndex = index
-                        onSelectionChange(index)
-                        expanded = false},
-                )
-            }
-        }
-    }
-
-}
 

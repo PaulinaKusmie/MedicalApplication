@@ -7,7 +7,7 @@ import com.example.composeactivity.compose.Tools.TimeType
 @Entity(tableName = "reminder")
 data class Reminder(
     @PrimaryKey val id: Int,
-    val countReminder: Int = 0,
-    val TypeOfTime: Int = 0)
+    var countReminder: Int = 0,
+    var TypeOfTime: Int = 0)
 
 

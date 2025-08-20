@@ -1,50 +1,43 @@
 package com.example.composeactivity.compose
-
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.composeactivity.compose.Tools.CounterWithDropdown
-import com.example.composeactivity.compose.Tools.DropdownMenuBoxTime
-import com.example.composeactivity.compose.Tools.TimeType
-import com.example.composeactivity.compose.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.ReminderViewModel
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.asFlow
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.composeactivity.data.entity.Reminder
-import kotlinx.coroutines.flow.forEach
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -74,51 +67,125 @@ fun ReminderScreen( navController: NavController,
         Column(modifier = Modifier
             .padding(padding).padding(vertical = 20.dp, horizontal = 20.dp)) {
 
-            val TimeTypeInt = 0;
-            val mode = TimeType.DAY
-            when(mode) {
-                TimeType.HOUR -> 0
-                TimeType.DAY -> 1
-                TimeType.WEEK -> 2
-                TimeType.MONTH -> 3
-            }
-
-            var chrum = Triple(0, 0, 0)
 
 
-            reminders.forEach { x -> CounterWithDropdown(x.id, x.countReminder, x.TypeOfTime, onSelectionChange = {
-                viewModels.updateReminder(it.first, it.second, it.third)
-            }) }
+            reminders.forEach { x -> CounterWithDropdown(x,
+                onSelectionChange = {
+                viewModels.updateReminder(it.id, it.countReminder, it.TypeOfTime)
+            }, OnSwipeStateChange = {
+                    viewModels.deleteReminder(it)
+            })}
 
-
-            Button(modifier = Modifier.height(35.dp),onClick = {
-                viewModels.addReminder()
-            }) { Text("+") }
-
-
-
-
-
-            //CounterWithDropdown(4,TimeTypeInt)
         }
     }
 
-    MyScreen()
+    FloatingActionButton(
+        onClick = {  viewModels.addReminder() },
+        modifier = Modifier
+            .padding(24.dp)
+    ) {
+        Icon(Icons.Default.Add, contentDescription = "Dodaj")
+    }
 }
 
 
 
 @Composable
-fun MyScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
+fun CounterWithDropdown (
+    reminder : Reminder,
+    onSelectionChange: (Reminder) -> Unit,
+    OnSwipeStateChange: (Reminder) -> Unit)  {
 
-        FloatingActionButton(
-            onClick = {  },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(24.dp)
+
+    var value by remember { mutableStateOf(reminder.countReminder) }
+    var type by remember { mutableStateOf(reminder.TypeOfTime) }
+
+
+    val state = rememberSwipeToDismissBoxState()
+    if(state.currentValue == SwipeToDismissBoxValue.EndToStart)
+        OnSwipeStateChange(reminder)
+
+
+    Column(
+        modifier = Modifier
+            .padding(5.dp)
+    ) {
+        SwipeToDismissBox(
+            state = state,
+            backgroundContent = { Modifier.background(Color.Gray)},
+            enableDismissFromStartToEnd = false,  // przesuwanie w prawo
+            enableDismissFromEndToStart = true   // przesuwanie w lewo
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Dodaj")
+
+
+            Row {
+                TextField(
+                    value = value.toString(),
+                    onValueChange = { },
+                    modifier = Modifier
+                        .width(90.dp)
+                        .padding(1.dp, 1.dp, 5.dp, 1.dp),
+                    enabled = true,
+                    readOnly = true
+                )
+                Column(modifier = Modifier) {
+                    Button(
+                        modifier = Modifier.height(35.dp),
+                        onClick = { value += 1 }) { Text("+") }
+                    Button(
+                        modifier = Modifier.height(35.dp),
+                        onClick = { value -= 1 }) { Text("-") }
+                }
+
+                DropdownMenuBoxTime(type, onSelectionChange = {
+                    type = it
+                })
+            }
+
+            reminder.countReminder = value
+            reminder.TypeOfTime = type
+            onSelectionChange(reminder)
         }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuBoxTime(typeOfTime : Int, onSelectionChange: (Int) -> Unit)
+{
+    var expanded by remember{ mutableStateOf(value = false) }
+    var options = listOf("Godziny","Dni","Tygodnie","Miesiące" )
+    var selectedIndex  by remember{ mutableStateOf(typeOfTime.coerceIn(options.indices))  }
+
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded})
+    {
+        TextField(
+            value = options[selectedIndex],
+            onValueChange = { },
+            readOnly = true,
+            label = { Text("Jednostka czasu")},
+            modifier = Modifier.menuAnchor()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded  = false},
+
+            ){
+            options.forEachIndexed  { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        selectedIndex = index
+                        onSelectionChange(index)
+                        expanded = false},
+                )
+            }
+        }
+    }
+
+}
+
