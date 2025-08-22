@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.collections.find
 
 class ReminderViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -37,11 +38,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
         try {
 
             val reminders = repo.allReminder.first()
-
-
-            var dupa = reminders.find  {x -> x.countReminder == 1 && x.TypeOfTime == 0 }
-
-            if(dupa != null)
+            if((reminders.find  {x -> x.countReminder == 1 && x.TypeOfTime == 0 }) != null)
             {
                 _toastEvent.emit("You can't add either same reminders")
 
@@ -56,6 +53,15 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
     fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = viewModelScope.launch{
         try {
+            val reminders = repo.allReminder.first()
+            if((reminders.find  {x -> x.countReminder == countReminder && x.TypeOfTime == typeOfTime}) != null)
+            {
+                _toastEvent.emit("You already have this same reminders")
+
+            } else{
+                repo.updateReminder(id, countReminder, typeOfTime)
+            }
+
             repo.updateReminder(id, countReminder, typeOfTime)
         } catch (e : Exception){ Log.e("Error", "Fail updated reminder") }
     }
