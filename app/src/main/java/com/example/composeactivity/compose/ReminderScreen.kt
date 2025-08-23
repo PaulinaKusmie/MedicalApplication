@@ -2,6 +2,7 @@ package com.example.composeactivity.compose
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,7 +52,9 @@ import com.example.composeactivity.data.entity.Reminder
 fun ReminderScreen( navController: NavController,
                          onBack: () -> Unit,
                     viewModel: ReminderViewModel = viewModel())
-{ val reminders by viewModel.reminders.observeAsState(initial = emptyList())
+{
+
+    val reminders by viewModel.reminders.observeAsState(initial = emptyList())
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
@@ -77,12 +81,14 @@ fun ReminderScreen( navController: NavController,
     ) {
             padding ->
         Column(modifier = Modifier
-            .padding(padding).padding(vertical = 20.dp, horizontal = 20.dp)) {
+            .padding(padding)
+            .padding(vertical = 20.dp, horizontal = 20.dp),
+            verticalArrangement = Arrangement.SpaceBetween) {
 
             LazyColumn {
                 items(
                     count = reminders.size,
-                    key = { index -> reminders[index].id }  // podajesz unikalny klucz na podstawie id
+                    key = { index -> reminders[index].id }
                 ) { index ->
                     val reminder = reminders[index]
                     CounterWithDropdown(
@@ -98,24 +104,17 @@ fun ReminderScreen( navController: NavController,
             }
 
 
+            FloatingActionButton(
+                onClick = {  viewModel.addReminder() },
 
-//            reminders.forEach { x -> CounterWithDropdown(x,
-//                onSelectionChange = {
-//                viewModels.updateReminder(it.id, it.countReminder, it.TypeOfTime)
-//            }, OnSwipeStateChange = {
-//                    viewModels.deleteReminder(it)
-//            })}
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Dodaj")
 
+            }
         }
     }
 
-    FloatingActionButton(
-        onClick = {  viewModel.addReminder() },
-        modifier = Modifier
-            .padding(24.dp)
-    ) {
-        Icon(Icons.Default.Add, contentDescription = "Dodaj")
-    }
+
 }
 
 
@@ -127,8 +126,8 @@ fun CounterWithDropdown (
     OnSwipeStateChange: (Reminder) -> Unit)  {
 
 
-    var value = reminder.countReminder
-    var type = reminder.TypeOfTime
+    var value by remember(reminder) { mutableStateOf(reminder.countReminder) }
+    var type by remember(reminder) { mutableStateOf(reminder.TypeOfTime) }
 
 
     val state = rememberSwipeToDismissBoxState()

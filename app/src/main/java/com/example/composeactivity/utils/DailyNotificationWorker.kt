@@ -18,8 +18,6 @@ class DailyNotificationWorker(context : Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val database = (AppDatabase.get(applicationContext)).visitDateDao()
 
-        val dupa = Converter.localDateTimeToLong(LocalDateTime.now())
-
         val startOfDay = Converter.localDateTimeToLong(LocalDateTime.now().toLocalDate().atStartOfDay())
         val endOfDay = Converter.localDateTimeToLong(LocalDateTime.now().toLocalDate().atTime(23, 59, 59))
 

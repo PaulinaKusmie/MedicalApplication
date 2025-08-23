@@ -11,6 +11,7 @@ import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.ReminderRepository
+import com.example.composeactivity.utils.ToastManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,15 +25,6 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     private val repo = ReminderRepository(AppDatabase.get(application).reminderDao())
     val reminders = repo.allReminder.asLiveData()
 
-    private val _toastEvent = MutableSharedFlow<String>()
-    val toastEvent = _toastEvent
-
-    fun showToast(message: String) {
-        viewModelScope.launch {
-            _toastEvent.emit(message)
-        }
-    }
-
 
     fun addReminder() = viewModelScope.launch{
         try {
@@ -40,36 +32,40 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
             val reminders = repo.allReminder.first()
             if((reminders.find  {x -> x.countReminder == 1 && x.TypeOfTime == 0 }) != null)
             {
-                _toastEvent.emit("You can't add either same reminders")
+                ToastManager.showToast("You can't add same reminders")
 
-            } else{
+            }else if (reminders.count() > 4)
+            {
+                ToastManager.showToast("You have added maximum number of reminders")
+            }
+            else{
                 val newReminder = Reminder(getLastId(),1,0)
                 repo.addReminder(newReminder)
             }
 
-        } catch (e : Exception){ Log.e("Error", "Fail added reminder") }
+        } catch (e : Exception){ Log.e("Error", "Fail added reminder, please try again") }
     }
 
 
     fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = viewModelScope.launch{
         try {
             val reminders = repo.allReminder.first()
-            if((reminders.find  {x -> x.countReminder == countReminder && x.TypeOfTime == typeOfTime}) != null)
+            val exists = reminders.any { it.countReminder == countReminder && it.TypeOfTime == typeOfTime }
+            if (exists)
             {
-                _toastEvent.emit("You already have this same reminders")
+                ToastManager.showToast("You already have this same reminders")
 
             } else{
                 repo.updateReminder(id, countReminder, typeOfTime)
             }
 
-            repo.updateReminder(id, countReminder, typeOfTime)
-        } catch (e : Exception){ Log.e("Error", "Fail updated reminder") }
+        } catch (e : Exception){ Log.e("Error", "Fail updated reminder, please try again") }
     }
 
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch{
         try {
             repo.deleteReminder(reminder)
-        } catch (e : Exception){ Log.e("Error", "Fail updated reminder") }
+        } catch (e : Exception){ Log.e("Error", "Fail deleted reminder, please try again") }
     }
 
 
