@@ -28,9 +28,6 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
 
     fun setMode(mode: EntryMode) {
         viewModelScope.launch {
-
-
-
             try {
                 when (mode) {
 
