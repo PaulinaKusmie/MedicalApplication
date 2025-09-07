@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.firebase.messaging)     // ✅ Messaging
 
     implementation(libs.wheelPickerCompose)
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.compose.runtime:runtime-livedata")
