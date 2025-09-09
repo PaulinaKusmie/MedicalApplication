@@ -1,0 +1,32 @@
+package com.example.composeactivity.api
+
+import com.example.composeactivity.data.entity.Reminder
+import kotlinx.coroutines.flow.Flow
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+
+interface ReminderAPI {
+    @GET("/reminders/{userId}")
+    suspend fun getReminders(@Path("userId") userId: Int): Flow<List<Reminder>>
+
+    @PUT("/reminders/{userId}/{id}")
+    suspend fun updateReminder(
+        @Path("userId") userId: Int,
+        @Path("id") id: Int,
+        @Body reminder: Reminder
+    ): Reminder
+
+    @POST("/reminders")
+    suspend fun addReminder(@Body reminder: Reminder): Reminder
+
+    @DELETE("/reminders/{id}/{userId}")
+    suspend fun deleteReminder(
+        @Path("id") id: Int,
+        @Path("userId") userId: Int
+    )
+
+}
