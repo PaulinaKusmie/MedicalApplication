@@ -15,7 +15,7 @@ interface SpecjalizationUserAPI {
     suspend fun createSpecjalizationUser(@Body specjalizationUser: SpecjalizationUser) : Response<ApiResponse>
 
     @DELETE("/specjalizationUsers/{id}/{userId}")
-    suspend fun deleteUserExamination(
+    suspend fun deleteSpecjalizationUser(
         @Path("id") id : Int,
         @Path("userId") userId : Int
     ) : ApiResponse
