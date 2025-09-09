@@ -9,5 +9,5 @@ interface ExaminationAPI {
 
 
     @GET("/examinations/{userId}")
-    suspend fun getExamination(@Path("userId") userId: Int) : Flow<List<Examination>>
+    suspend fun getExamination(@Path("userId") userId: Int) :List<Examination>
 }

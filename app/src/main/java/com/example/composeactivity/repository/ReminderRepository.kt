@@ -12,9 +12,10 @@ class ReminderRepository(private val reminderApi: ReminderAPI = ApiClient.remind
 
     suspend fun allReminder()  = reminderApi.getReminders(1);
 
-    //suspend fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = reminderApi.updateReminder(id,countReminder,typeOfTime)
+//    suspend fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int)
+//    = reminderApi.updateReminder(id,countReminder,typeOfTime) do object
 
-    //suspend fun addReminder(reminder: Reminder) = reminderApi.updateReminder(1,1)
+    suspend fun addReminder(reminder: Reminder) = reminderApi.addReminder(reminder)
 
     suspend fun deleteReminder(reminder: Reminder) = reminderApi.deleteReminder(reminder.id,1)
 
