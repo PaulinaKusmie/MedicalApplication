@@ -7,13 +7,16 @@ import com.example.composeactivity.data.dao.ReminderDao
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class ReminderRepository(private val reminderApi: ReminderAPI = ApiClient.reminderService) {
 
-    suspend fun allReminder()  = reminderApi.getReminders(1);
+     fun allReminder(): Flow<List<Reminder>> = flow{
+            emit(reminderApi.getReminders(1))
+        };
 
-//    suspend fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int)
-//    = reminderApi.updateReminder(id,countReminder,typeOfTime) do object
+    suspend fun updateReminder(userId : Int, id: Int, reminder: Reminder)
+    = reminderApi.updateReminder(userId, id, reminder)
 
     suspend fun addReminder(reminder: Reminder) = reminderApi.addReminder(reminder)
 

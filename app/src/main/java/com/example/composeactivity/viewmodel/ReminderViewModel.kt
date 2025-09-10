@@ -20,21 +20,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.collections.find
 
-class ReminderViewModel(application: Application) : AndroidViewModel(application) {
+class ReminderViewModel(application: Application,
+                        private val repo: ReminderRepository) : AndroidViewModel(application) {
 
-    private val repo = ReminderRepository(AppDatabase.get(application).reminderDao())
-    val reminders = repo.allReminder.asLiveData()
+    val reminders: Flow<List<Reminder>> = repo.allReminder()
 
 
     fun addReminder() = viewModelScope.launch{
         try {
 
-            val reminders = repo.allReminder.first()
-            if((reminders.find  {x -> x.countReminder == 1 && x.TypeOfTime == 0 }) != null)
+            val reminders = repo.allReminder().first()
+            if(reminders.any { it.countReminder == 1 && it.TypeOfTime == 0 })
             {
                 ToastManager.showToast("You can't add same reminders")
 
-            }else if (reminders.count() > 4)
+            }else if (reminders.size > 4)
             {
                 ToastManager.showToast("You have added maximum number of reminders")
             }
@@ -49,14 +49,20 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
     fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = viewModelScope.launch{
         try {
-            val reminders = repo.allReminder.first()
-            val exists = reminders.any { it.countReminder == countReminder && it.TypeOfTime == typeOfTime }
-            if (exists)
+            val reminders = repo.allReminder().first()
+            if (reminders.any { it.countReminder == countReminder && it.TypeOfTime == typeOfTime })
             {
                 ToastManager.showToast("You already have this same reminders")
 
             } else{
-                repo.updateReminder(id, countReminder, typeOfTime)
+                var reminder : Reminder? = reminders.find { it.id == id }
+                if(reminder != null){
+                    repo.updateReminder(id, countReminder, reminder)
+                }
+                else{
+                    ToastManager.showToast("Something went wrong!")
+                }
+
             }
 
         } catch (e : Exception){ Log.e("Error", "Fail updated reminder, please try again") }
@@ -70,7 +76,7 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
 
     suspend fun getLastId() : Int {
-        val reminders = repo.allReminder.first()
+        val reminders = repo.allReminder().first()
         val lasttId = if (reminders.isEmpty()) 1 else reminders.maxOf { it.id } + 1
 
         return lasttId
