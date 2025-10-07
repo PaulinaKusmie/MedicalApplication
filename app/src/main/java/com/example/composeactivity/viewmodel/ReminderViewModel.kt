@@ -3,24 +3,26 @@ package com.example.composeactivity.viewmodel
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.composeactivity.data.AppDatabase
+
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.utils.ToastManager
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.collections.find
 
-class ReminderViewModel(application: Application,
+
+class ReminderViewModel (application: Application,
                         private val repo: ReminderRepository) : AndroidViewModel(application) {
 
     val reminders: Flow<List<Reminder>> = repo.allReminder()
@@ -30,7 +32,7 @@ class ReminderViewModel(application: Application,
         try {
 
             val reminders = repo.allReminder().first()
-            if(reminders.any { it.countReminder == 1 && it.TypeOfTime == 0 })
+            if(reminders.any { it.countReminder == 1 && it.typeOfTime == 0 })
             {
                 ToastManager.showToast("You can't add same reminders")
 
@@ -39,7 +41,7 @@ class ReminderViewModel(application: Application,
                 ToastManager.showToast("You have added maximum number of reminders")
             }
             else{
-                val newReminder = Reminder(getLastId(),1,0)
+                val newReminder = Reminder(getLastId(),1,1,1) ///tu zmien user idddd
                 repo.addReminder(newReminder)
             }
 
@@ -47,21 +49,21 @@ class ReminderViewModel(application: Application,
     }
 
 
-    fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = viewModelScope.launch{
+    fun updateReminder(reminder: Reminder) = viewModelScope.launch{
         try {
             val reminders = repo.allReminder().first()
-            if (reminders.any { it.countReminder == countReminder && it.TypeOfTime == typeOfTime })
+            if (reminders.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
             {
                 ToastManager.showToast("You already have this same reminders")
 
             } else{
-                var reminder : Reminder? = reminders.find { it.id == id }
-                if(reminder != null){
-                    repo.updateReminder(id, countReminder, reminder)
-                }
-                else{
-                    ToastManager.showToast("Something went wrong!")
-                }
+               // var reminder : Reminder? = reminders.find { it.id == reminder.id }
+               // if(reminder != null){
+                    repo.updateReminder(reminder.id, 1, reminder)
+               // }
+               // else{
+                   // ToastManager.showToast("Something went wrong!")
+               //}
 
             }
 

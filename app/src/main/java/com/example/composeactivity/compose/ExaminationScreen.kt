@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,7 +43,8 @@ import com.example.composeactivity.ui.theme.MainColor
 fun ExaminationScreen(navController: NavController,
                       onBack: () -> Unit,
                       viewModel : ExaminationViewModel = viewModel())
-{ val examinations by viewModel.examinations.observeAsState(initial = emptyList())
+{
+    val examinations by viewModel.examinations.collectAsState(initial = emptyList())
 
 
     Scaffold(

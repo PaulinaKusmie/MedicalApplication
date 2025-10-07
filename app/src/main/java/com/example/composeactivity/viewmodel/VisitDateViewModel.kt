@@ -10,16 +10,16 @@ import com.example.composeactivity.compose.Tools.DateType
 import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
 import com.example.composeactivity.compose.Tools.VisitType
-import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.VisitDate
+import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.repository.VisitDateRepository
 import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class VisitDateViewModel (application: Application) : AndroidViewModel(application)  {
-    private val repo =  VisitDateRepository(AppDatabase.get(application).visitDateDao())
+class VisitDateViewModel (application: Application,
+                          private val repo: VisitDateRepository) : AndroidViewModel(application)  {
 
     internal val dateVisitUI = mutableStateOf(VisitDateUiState())
     val DateVisitUI : State<VisitDateUiState> = dateVisitUI
@@ -32,14 +32,14 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
                 when (mode) {
 
                     is EntryMode.AddSpecjalizationVisit -> {
-                        val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, VisitType.SPECIALIZATION)
+                        val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, 0) //SPECIALIZATION
                         val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.specjalizationId, type = VisitType.SPECIALIZATION)
                         dateVisitUI.value = uiState.copy(name = mode.name)
 
                     }
 
                     is EntryMode.AddExaminationVisit -> {
-                        val visitDate: VisitDate? = getVisitDate(mode.examinationId, VisitType.EXAMINATION)
+                        val visitDate: VisitDate? = getVisitDate(mode.examinationId,0 ) //VisitType.EXAMINATION
                         val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.examinationId, type = VisitType.EXAMINATION)
                         dateVisitUI.value = uiState.copy(name = mode.name)
 
@@ -53,8 +53,8 @@ class VisitDateViewModel (application: Application) : AndroidViewModel(applicati
     }
 
 
-    suspend fun getVisitDate(id: Int, type :VisitType): VisitDate? = withContext(Dispatchers.IO) {
-        return@withContext repo.getVisitDate(id,type)
+    suspend fun getVisitDate(id: Int, type :Int): VisitDate? = withContext(Dispatchers.IO) {
+        return@withContext repo.getVisitDate(id, 1, type) // tutaj type zmień na INT
     }
 
 

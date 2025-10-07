@@ -8,7 +8,7 @@ class VisitDateRepository(private val visitDateAPI: VisitDateAPI) {
 
     suspend fun allVisitDate() = visitDateAPI.getVisitDates(1);
 
-    suspend fun getVisitDate(foreignId : Int, type :Int ) = visitDateAPI.getVisitDateByForeignIdAndType(foreignId, 1,  type)
+    suspend fun getVisitDate(foreignId : Int,userId : Int , type :Int ) = visitDateAPI.getVisitDateByForeignIdAndType(foreignId, 1,  type)
 
     suspend fun addVisit(visitDate: VisitDate) = visitDateAPI.addVisit(visitDate)
 

@@ -1,16 +1,18 @@
 package com.example.composeactivity.repository
 
 import com.example.composeactivity.api.SpecjalizationAPI
-import com.example.composeactivity.data.dao.SpecjalizationDao
-import com.example.composeactivity.data.entity.Examination
+
 import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
 class SpecjalizationRepository(private val specjalizationAPI: SpecjalizationAPI) {
 
 
-    suspend fun allSpecjalization() = specjalizationAPI.getSpecjalization(1);
+     fun allSpecjalizations() : Flow<List<Specjalization>> =  flow{
+        emit(specjalizationAPI.getSpecjalizations(1))
+    }
 
     //suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
 

@@ -18,7 +18,6 @@ import com.example.composeactivity.utils.DailyNotificationWorker
 import com.example.composeactivity.utils.NotificationUtils
 import java.time.Duration
 
-
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +27,13 @@ class MainActivity : ComponentActivity() {
 
 
 
-        var myWorkRequest = PeriodicWorkRequestBuilder<DailyNotificationWorker>(Duration.ofMinutes(1)).build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "daily_notification",
-            ExistingPeriodicWorkPolicy.KEEP,
-            myWorkRequest
-        )
+//        var myWorkRequest = PeriodicWorkRequestBuilder<DailyNotificationWorker>(Duration.ofMinutes(1)).build()
+//
+//        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+//            "daily_notification",
+//            ExistingPeriodicWorkPolicy.KEEP,
+//            myWorkRequest
+//        )
 
 
         setContent {

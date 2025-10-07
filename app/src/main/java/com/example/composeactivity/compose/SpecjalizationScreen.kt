@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -42,7 +43,7 @@ fun SpecjalizationScreen(
     navController: NavController,
     onBack: () -> Unit,
     viewModel : SpecjalizationViewModel = viewModel()) {
-    val specjalizations by viewModel.specjalizations.observeAsState(initial = emptyList())
+    val specjalizations by viewModel.specjalizations.collectAsState(initial = emptyList())
 
     val specjalizacje = listOf(
         Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),

@@ -1,6 +1,5 @@
 package com.example.composeactivity.data.entity
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+
 import com.example.composeactivity.compose.Tools.VisitType
 import kotlinx.serialization.Serializable
 

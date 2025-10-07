@@ -3,13 +3,13 @@ package com.example.composeactivity.repository
 import com.example.composeactivity.api.ApiClient
 import com.example.composeactivity.api.ReminderAPI
 import com.example.composeactivity.compose.Tools.TimeType
-import com.example.composeactivity.data.dao.ReminderDao
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ReminderRepository(private val reminderApi: ReminderAPI = ApiClient.reminderService) {
+class ReminderRepository @Inject constructor (private val reminderApi: ReminderAPI = ApiClient.reminderService) {
 
      fun allReminder(): Flow<List<Reminder>> = flow{
             emit(reminderApi.getReminders(1))
