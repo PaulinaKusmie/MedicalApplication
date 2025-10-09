@@ -39,7 +39,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             ComposeActivityTheme {
-                NavHost(navController = navController, startDestination = "MainScreen") {
+                NavHost(navController = navController, startDestination = "LoginScreen") {
+                    composable("LoginScreen") {
+                        LoginScreen()
+                    }
                     composable("MainScreen") {
                         MainScreen(navController)
                     }

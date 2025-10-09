@@ -69,6 +69,7 @@ fun ReminderScreen( navController: NavController,
     val reminders by viewModel.reminders.collectAsState(initial = emptyList())
 
 
+
     LaunchedEffect(Unit) {
         ToastManager.toastEvent.collect { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

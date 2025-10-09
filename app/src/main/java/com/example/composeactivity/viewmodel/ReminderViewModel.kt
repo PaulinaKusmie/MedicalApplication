@@ -24,9 +24,17 @@ import kotlin.collections.find
 
 class ReminderViewModel (application: Application,
                         private val repo: ReminderRepository) : AndroidViewModel(application) {
+    private val _reminders = MutableStateFlow<List<Reminder>>(emptyList())
+    val reminders: StateFlow<List<Reminder>> = _reminders
 
-    val reminders: Flow<List<Reminder>> = repo.allReminder()
+    init {
+        fetchRemindersFromApi()
+    }
 
+    fun fetchRemindersFromApi() = viewModelScope.launch {
+        val latest = repo.allReminder().first()
+        _reminders.value = latest
+    }
 
     fun addReminder() = viewModelScope.launch{
         try {
@@ -51,19 +59,20 @@ class ReminderViewModel (application: Application,
 
     fun updateReminder(reminder: Reminder) = viewModelScope.launch{
         try {
-            val reminders = repo.allReminder().first()
-            if (reminders.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
+            val remindersCopy = repo.allReminder().first()
+            if (remindersCopy.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
             {
                 ToastManager.showToast("You already have this same reminders")
 
             } else{
-               // var reminder : Reminder? = reminders.find { it.id == reminder.id }
-               // if(reminder != null){
-                    repo.updateReminder(reminder.id, 1, reminder)
-               // }
-               // else{
-                   // ToastManager.showToast("Something went wrong!")
-               //}
+               if(reminder != null) {
+                   repo.updateReminder(reminder.id, 1, reminder)
+                   fetchRemindersFromApi()
+               }
+               else
+                   ToastManager.showToast("Something went wrong!")
+
+
 
             }
 
