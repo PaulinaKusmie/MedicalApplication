@@ -29,17 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.LoginViewModel
+import com.example.composeactivity.viewmodel.RegisterViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController,
-                onBack: () -> Unit,
-                vm: LoginViewModel = viewModel()) {
-
+fun RegisterScreen(vm: RegisterViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,12 +51,13 @@ fun LoginScreen(navController: NavController,
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Logowanie", fontWeight = FontWeight.Bold, fontSize = 26.sp, color = Color.Gray)
+            Text("Rejstracja", fontWeight = FontWeight.Bold, fontSize = 26.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = vm.email,
                 onValueChange = {
+
                     vm.clearMessage()
                 },
                 label = { Text("Email") },
@@ -83,20 +81,36 @@ fun LoginScreen(navController: NavController,
 
             Spacer(Modifier.height(8.dp))
 
+            OutlinedTextField(
+                value = vm.name,
+                onValueChange = {
+                    vm.clearMessage()
+                },
+                label = { Text("Imię") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+            )
+
+
+            Spacer(Modifier.height(8.dp))
+
+//            (
+//                value = vm.age,
+//                onValueChange = {
+//                    vm.clearMessage()
+//                },
+//                label = { Text("Wiek") },
+//                modifier = Modifier.fillMaxWidth(),
+//                singleLine = true,
+//            )
+
+            Spacer(Modifier.height(8.dp))
+
             Column(modifier = Modifier.fillMaxWidth().height(150.dp),
                 verticalArrangement = Arrangement.Center) {
 
-                Button(onClick = {vm.login()}, modifier = Modifier.weight(1f)) {
-                    Text("Zaloguj")
-                }
-                Spacer(Modifier.width(8.dp))
-                TextButton(onClick = {navController.navigate("RegisterScreen")}, modifier = Modifier.weight(1f)) {
+                Button(onClick = {vm.register()}, modifier = Modifier.weight(1f)) {
                     Text("Zarejestruj")
-                }
-                Spacer(Modifier.width(8.dp))
-                TextButton(onClick = {}, modifier = Modifier.weight(1f)) {
-                    Text("Nie pamiętasz hasła?")
-
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.example.composeactivity.viewmodel.factory
+package com.example.composeactivity.viewmodel.Factory
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

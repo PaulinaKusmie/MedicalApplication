@@ -12,5 +12,5 @@ class UserRepository(private val userAPI: UserAPI) {
 
     suspend fun getUser(userId: Int) = userAPI.getUser(userId)
 
-    suspend fun forgotPassword(request: LoginRequest) = userAPI.forgotPassword(request)
+    suspend fun forgotPassword(email: String) = userAPI.forgotPassword(email)
 }
