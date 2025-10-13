@@ -56,12 +56,14 @@ fun ReminderScreen( navController: NavController,
                          onBack: () -> Unit)
 {
     val context = LocalContext.current
-    val repo = remember { ReminderRepository() }
+    //val repo = remember {
+        //ReminderRepository()
+   // }
     val viewModel: ReminderViewModel = viewModel(
-        factory = ReminderViewModelFactory(
-            LocalContext.current.applicationContext as Application,
-            repo
-        )
+        //factory = ReminderViewModelFactory(
+            //LocalContext.current.applicationContext as Application,
+            //repo
+       // )
     )
 
     val reminders by viewModel.reminders.collectAsState(initial = emptyList())

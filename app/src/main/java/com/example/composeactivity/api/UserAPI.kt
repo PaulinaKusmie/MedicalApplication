@@ -8,8 +8,9 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import javax.inject.Inject
 
-interface UserAPI {
+interface UserAPI  {
 
     @POST("users/login")
     suspend fun login(@Body request: LoginRequest): Response<User>
@@ -23,3 +24,4 @@ interface UserAPI {
     @POST("users/{email}")
     suspend fun forgotPassword(@Path("email") email: String): Response<ApiResponse>
 }
+

@@ -28,17 +28,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.LoginViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController,
                 onBack: () -> Unit,
-                vm: LoginViewModel = viewModel()) {
+                vm: LoginViewModel = hiltViewModel()) {
 
     Box(
         modifier = Modifier
@@ -94,10 +95,10 @@ fun LoginScreen(navController: NavController,
                     Text("Zarejestruj")
                 }
                 Spacer(Modifier.width(8.dp))
-                TextButton(onClick = {}, modifier = Modifier.weight(1f)) {
-                    Text("Nie pamiętasz hasła?")
-
-                }
+//                TextButton(onClick = {vm.forgotPassword()}, modifier = Modifier.weight(1f)) {
+//                    Text("Nie pamiętasz hasła?")
+//
+//                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -108,3 +109,5 @@ fun LoginScreen(navController: NavController,
         }
     }
 }
+
+

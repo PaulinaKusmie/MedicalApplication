@@ -16,8 +16,10 @@ import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.utils.DailyNotificationWorker
 import com.example.composeactivity.utils.NotificationUtils
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

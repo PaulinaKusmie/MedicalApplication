@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ReminderRepository @Inject constructor (private val reminderApi: ReminderAPI = ApiClient.reminderService) {
+class ReminderRepository @Inject constructor (private val reminderApi: ReminderAPI) {
 
      fun allReminder(): Flow<List<Reminder>> = flow{
             emit(reminderApi.getReminders(1))

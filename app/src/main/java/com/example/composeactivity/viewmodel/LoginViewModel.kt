@@ -7,9 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeactivity.data.dto.LoginRequest
 import com.example.composeactivity.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(private val userRespository : UserRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor (private val userRespository : UserRepository)
+    : ViewModel() {
 
     var email by mutableStateOf("")
         private set
@@ -17,13 +21,16 @@ class LoginViewModel(private val userRespository : UserRepository) : ViewModel()
         private set
     var message by mutableStateOf("")
 
-    fun onEmailChange(newEmail: String) {
-        email = newEmail
+    fun forgotPassword() {
+        viewModelScope.launch {
+            if (email.isBlank()) {
+                message = "Wpisz adres mailowy"
+            }
+            userRespository.forgotPassword(email)
+            message = "Check your email"
+        }
     }
 
-    fun onPasswordChange(newPassword: String) {
-        password = newPassword
-    }
 
      fun login() {
          viewModelScope.launch {

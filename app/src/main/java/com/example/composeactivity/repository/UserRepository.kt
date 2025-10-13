@@ -3,8 +3,9 @@ package com.example.composeactivity.repository
 import com.example.composeactivity.api.UserAPI
 import com.example.composeactivity.data.dto.LoginRequest
 import com.example.composeactivity.data.entity.User
+import javax.inject.Inject
 
-class UserRepository(private val userAPI: UserAPI) {
+class UserRepository @Inject constructor(private val userAPI: UserAPI) {
 
     suspend fun login(requestLogin: LoginRequest) = userAPI.login(requestLogin)
 

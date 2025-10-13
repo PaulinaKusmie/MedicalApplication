@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
-
+    alias(libs.plugins.hilt) // ✅ tutaj BEZ "apply false"
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -48,7 +49,7 @@ android {
 }
 
 dependencies {
-  //  val room_version = "2.6.1"
+    //val room_version = "2.6.1"
     val nav_version = "2.9.0"
 
 
@@ -86,12 +87,18 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
 
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.51.1") // ✅ to jest to, czego brakuje
+    kapt("com.google.dagger:hilt-compiler:2.51.1")
+
+
 //    implementation(libs.hilt.android)
 //    ksp(libs.hilt.android.compiler)
 //    implementation(libs.hilt.navigation.compose)
 
 //    // ROOM
 //    implementation("androidx.room:room-runtime:$room_version")
-//    kapt("androidx.room:room-compiler:$room_version")
+      //kapt("androidx.room:room-compiler:$room_version")
 //    implementation("androidx.room:room-ktx:$room_version")
 }
+
