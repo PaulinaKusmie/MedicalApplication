@@ -9,4 +9,4 @@ data class User(
     val name: String,
     val age: Int,
     val password: String,
-    val created: Long)
+    val created: String?)

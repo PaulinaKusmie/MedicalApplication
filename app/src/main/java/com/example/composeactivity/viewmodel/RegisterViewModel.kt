@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeactivity.data.entity.User
 import com.example.composeactivity.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class RegisterViewModel(private val userRespository : UserRepository) : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val userRespository : UserRepository) : ViewModel() {
 
 
     var email by mutableStateOf("")
@@ -22,7 +25,7 @@ class RegisterViewModel(private val userRespository : UserRepository) : ViewMode
     var name by mutableStateOf("")
     private set
 
-    var age by mutableStateOf(0)
+    var age by mutableStateOf("")
         private set
 
     var message by mutableStateOf("")
@@ -32,17 +35,16 @@ class RegisterViewModel(private val userRespository : UserRepository) : ViewMode
 
     fun register() {
         viewModelScope.launch {
-            if (email.isBlank() || password.isBlank() || name.isBlank() || age == 0) {
+            if (email.isBlank() || password.isBlank() || name.isBlank() || (age as Int) == 0) {
                 message = "Wypełnij wszystkie pola"
             } else {
                 var user = User(
                     0,
                     email,
                     password,
-                    age,
+                    (age as Int),
                     name,
-                    Converter.localDateTimeToLong(LocalDateTime.now()
-                    )
+                    Converter.localDateTimeToString(LocalDateTime.now())
                 )
                var result = userRespository.register(user)
                 if(result.isSuccessful)

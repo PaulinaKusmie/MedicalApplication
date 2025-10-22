@@ -2,6 +2,7 @@ package com.example.composeactivity.viewmodel
 
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -14,7 +15,6 @@ class  Converter {
                      .toLocalDateTime()
              }
          }
-
 
          fun localDateTimeToLong(dateTime: LocalDateTime): Long {
              return dateTime.atZone(ZoneId.systemDefault())
@@ -33,6 +33,17 @@ class  Converter {
          fun localDateTimeToFormattedString(dateTime: LocalDateTime): String {
              val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
              return dateTime.format(formatter)
+         }
+
+         fun stringToLocalDateTime(dateString: String): LocalDateTime {
+             // jeśli string ma "Z" na końcu (UTC)
+             return OffsetDateTime.parse(dateString).toLocalDateTime()
+         }
+
+
+         fun localDateTimeToString(localDateTime: LocalDateTime): String {
+             val offsetDateTime = localDateTime.atOffset(java.time.ZoneOffset.UTC)
+             return offsetDateTime.toString() // np. "2025-10-22T21:45:00Z"
          }
      }
 

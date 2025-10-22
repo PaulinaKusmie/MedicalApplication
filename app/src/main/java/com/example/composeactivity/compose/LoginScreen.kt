@@ -61,6 +61,7 @@ fun LoginScreen(navController: NavController,
             OutlinedTextField(
                 value = vm.email,
                 onValueChange = {
+                   vm.email = it
                     vm.clearMessage()
                 },
                 label = { Text("Email") },
@@ -73,6 +74,7 @@ fun LoginScreen(navController: NavController,
             OutlinedTextField(
                 value = vm.password,
                 onValueChange = {
+                    vm.password = it
                     vm.clearMessage()
                 },
                 label = { Text("Hasło") },
@@ -84,7 +86,7 @@ fun LoginScreen(navController: NavController,
 
             Spacer(Modifier.height(8.dp))
 
-            Column(modifier = Modifier.fillMaxWidth().height(150.dp),
+            Column(modifier = Modifier.fillMaxWidth().height(130.dp),
                 verticalArrangement = Arrangement.Center) {
 
                 Button(onClick = {vm.login()}, modifier = Modifier.weight(1f)) {
@@ -95,10 +97,10 @@ fun LoginScreen(navController: NavController,
                     Text("Zarejestruj")
                 }
                 Spacer(Modifier.width(8.dp))
-//                TextButton(onClick = {vm.forgotPassword()}, modifier = Modifier.weight(1f)) {
-//                    Text("Nie pamiętasz hasła?")
-//
-//                }
+                TextButton(onClick = {vm.forgotPassword()}, modifier = Modifier.weight(1f)) {
+                    Text("Nie pamiętasz hasła?")
+
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))

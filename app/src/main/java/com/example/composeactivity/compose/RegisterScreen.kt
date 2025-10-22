@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.LoginViewModel
@@ -36,7 +37,7 @@ import com.example.composeactivity.viewmodel.RegisterViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(vm: RegisterViewModel = viewModel()) {
+fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -94,19 +95,19 @@ fun RegisterScreen(vm: RegisterViewModel = viewModel()) {
 
             Spacer(Modifier.height(8.dp))
 
-//            (
-//                value = vm.age,
-//                onValueChange = {
-//                    vm.clearMessage()
-//                },
-//                label = { Text("Wiek") },
-//                modifier = Modifier.fillMaxWidth(),
-//                singleLine = true,
-//            )
+            OutlinedTextField(
+                value = vm.age,
+                onValueChange = {
+                    vm.clearMessage()
+                },
+                label = { Text("Wiek") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+            )
 
             Spacer(Modifier.height(8.dp))
 
-            Column(modifier = Modifier.fillMaxWidth().height(150.dp),
+            Column(modifier = Modifier.fillMaxWidth().height(70.dp),
                 verticalArrangement = Arrangement.Center) {
 
                 Button(onClick = {vm.register()}, modifier = Modifier.weight(1f)) {
