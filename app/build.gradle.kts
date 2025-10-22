@@ -90,6 +90,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:2.51.1") // ✅ to jest to, czego brakuje
     kapt("com.google.dagger:hilt-compiler:2.51.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
 
 }

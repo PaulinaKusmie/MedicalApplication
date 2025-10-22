@@ -17,34 +17,29 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
 
 
     var email by mutableStateOf("")
-        private set
 
     var password by mutableStateOf("")
-        private set
 
     var name by mutableStateOf("")
-    private set
 
     var age by mutableStateOf("")
-        private set
 
     var message by mutableStateOf("")
 
 
 
-
     fun register() {
         viewModelScope.launch {
-            if (email.isBlank() || password.isBlank() || name.isBlank() || (age as Int) == 0) {
+            if (email.isBlank() || password.isBlank() || name.isBlank() || age.toInt() == 0) {
                 message = "Wypełnij wszystkie pola"
             } else {
                 var user = User(
                     0,
                     email,
                     password,
-                    (age as Int),
+                    age.toInt() ,
                     name,
-                    Converter.localDateTimeToString(LocalDateTime.now())
+                    null
                 )
                var result = userRespository.register(user)
                 if(result.isSuccessful)

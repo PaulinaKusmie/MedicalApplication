@@ -6,9 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composeactivity.UserSession
 import com.example.composeactivity.data.dto.LoginRequest
 import com.example.composeactivity.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +24,9 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
     var password by mutableStateOf("")
 
     var message by mutableStateOf("")
+
+    private val navigationEvent = MutableSharedFlow<Boolean>()
+    val NavigationEvent = navigationEvent.asSharedFlow()
 
 
 
@@ -39,8 +45,12 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
              } else {
                  val loginRequest = LoginRequest(email, password)
                  var result = userRespository.login(loginRequest)
-                  if (result.isSuccessful)
-                   message = "Sucessful"
+                  if (result.isSuccessful){
+                      UserSession.saveUserId(result.body()?.id!!)
+                      message = "Sucessful! hello " + result.body()?.name!!
+                      loginEvent();
+
+                  }
                  else message = "Something went wrong! Try again!"
              }
              } catch(e: Exception) {
@@ -49,8 +59,13 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
          }
     }
 
+    suspend fun loginEvent(){
+        navigationEvent.emit(true)
+    }
+
     fun clearMessage() {
         message = ""
     }
+
 
 }

@@ -58,7 +58,7 @@ fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
             OutlinedTextField(
                 value = vm.email,
                 onValueChange = {
-
+                    vm.email = it
                     vm.clearMessage()
                 },
                 label = { Text("Email") },
@@ -71,6 +71,7 @@ fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
             OutlinedTextField(
                 value = vm.password,
                 onValueChange = {
+                    vm.password = it
                     vm.clearMessage()
                 },
                 label = { Text("Hasło") },
@@ -85,6 +86,7 @@ fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
             OutlinedTextField(
                 value = vm.name,
                 onValueChange = {
+                    vm.name = it
                     vm.clearMessage()
                 },
                 label = { Text("Imię") },
@@ -98,6 +100,7 @@ fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
             OutlinedTextField(
                 value = vm.age,
                 onValueChange = {
+                    vm.age = it
                     vm.clearMessage()
                 },
                 label = { Text("Wiek") },

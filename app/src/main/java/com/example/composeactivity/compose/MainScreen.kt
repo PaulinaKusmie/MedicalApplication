@@ -1,5 +1,6 @@
 package com.example.composeactivity.compose
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(navController: NavController) {
-
+    HomeScreen()
     Scaffold { innerPadding ->
         Box(
             modifier = Modifier
@@ -75,5 +76,12 @@ fun GenerateButton(label: String, onClick: () -> Unit) {
         onClick = onClick
     ) {
         Text(label)
+    }
+}
+
+@Composable
+fun HomeScreen() {
+    BackHandler {
+
     }
 }
