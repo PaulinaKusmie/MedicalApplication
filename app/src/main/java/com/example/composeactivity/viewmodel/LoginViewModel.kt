@@ -1,5 +1,5 @@
 package com.example.composeactivity.viewmodel
-
+import kotlinx.coroutines.*
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +10,7 @@ import com.example.composeactivity.UserSession
 import com.example.composeactivity.data.dto.LoginRequest
 import com.example.composeactivity.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -48,7 +49,8 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
                   if (result.isSuccessful){
                       UserSession.saveUserId(result.body()?.id!!)
                       message = "Sucessful! hello " + result.body()?.name!!
-                      loginEvent();
+                      delay(3000)
+                      navigationEvent.emit(true)
 
                   }
                  else message = "Something went wrong! Try again!"
@@ -59,9 +61,6 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
          }
     }
 
-    suspend fun loginEvent(){
-        navigationEvent.emit(true)
-    }
 
     fun clearMessage() {
         message = ""

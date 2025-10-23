@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             onBack = { navController.popBackStack() })
                     }
                     composable("RegisterScreen") {
-                        RegisterScreen()
+                        RegisterScreen(navController)
                     }
                     composable("MainScreen") {
                         MainScreen(navController)

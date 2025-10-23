@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.composeactivity.data.entity.User
 import com.example.composeactivity.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
+import kotlinx.coroutines.*
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(private val userRespository : UserRepository) : ViewModel() {
@@ -25,6 +27,9 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
     var age by mutableStateOf("")
 
     var message by mutableStateOf("")
+
+    private val navigationEvent = MutableSharedFlow<Boolean>()
+    val NavigationEvent = navigationEvent.asSharedFlow()
 
 
 
@@ -42,8 +47,11 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
                     null
                 )
                var result = userRespository.register(user)
-                if(result.isSuccessful)
-                message = "Zarejestrowano użytkownika"
+                if(result.isSuccessful) {
+                    message = "Zarejestrowano użytkownika"
+                    delay(3000)
+                    navigationEvent.emit(true)
+                }
                 else
                     message = "Something went wrong! Try again!"
             }

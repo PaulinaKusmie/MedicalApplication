@@ -157,17 +157,8 @@ fun SpecjalizationScreen(
             }
         }
 
-        //if(showDialog){
-            //MyPopupDialog(spec.name)
-       // }
+
     }
 
-//@Composable
-//fun MyScreen() {
-//    val context = LocalContext.current
-//
-//    val activity = context as? MainActivity
-//    activity?.scheduleNotification(2025, 7, 12, 18, 5)
-//}
 
 

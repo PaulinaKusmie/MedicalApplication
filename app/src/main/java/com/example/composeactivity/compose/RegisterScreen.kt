@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.LoginViewModel
 import com.example.composeactivity.viewmodel.RegisterViewModel
@@ -37,7 +39,8 @@ import com.example.composeactivity.viewmodel.RegisterViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
+fun RegisterScreen(navController: NavController,
+                   vm: RegisterViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -125,4 +128,8 @@ fun RegisterScreen(vm: RegisterViewModel = hiltViewModel()) {
             }
         }
     }
+
+
+    LaunchedEffect(Unit) {
+        vm.NavigationEvent.collect { navController.navigate("MainScreen")} }
 }
