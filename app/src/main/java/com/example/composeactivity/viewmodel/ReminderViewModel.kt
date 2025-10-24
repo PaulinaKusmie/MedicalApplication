@@ -2,38 +2,44 @@ package com.example.composeactivity.viewmodel
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.example.composeactivity.data.entity.Reminder
-import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.utils.ToastManager
-
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.composeactivity.UserSession
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.find
+
+@HiltViewModel
+class ReminderViewModel @Inject constructor (private val repo: ReminderRepository)  : ViewModel() {
 
 
-class ReminderViewModel (application: Application,
-                        private val repo: ReminderRepository) : AndroidViewModel(application) {
     private val _reminders = MutableStateFlow<List<Reminder>>(emptyList())
     val reminders: StateFlow<List<Reminder>> = _reminders
 
+    private var userId: Int by mutableStateOf(0)
+
     init {
         fetchRemindersFromApi()
+        fetchUserId()
     }
 
     fun fetchRemindersFromApi() = viewModelScope.launch {
         val latest = repo.allReminder().first()
         _reminders.value = latest
+    }
+
+    fun fetchUserId() = viewModelScope.launch {
+        userId = UserSession.getUserIdOnce()!!
     }
 
     fun addReminder() = viewModelScope.launch{
@@ -49,7 +55,7 @@ class ReminderViewModel (application: Application,
                 ToastManager.showToast("You have added maximum number of reminders")
             }
             else{
-                val newReminder = Reminder(getLastId(),1,1,1) ///tu zmien user idddd
+                val newReminder = Reminder(getLastId(),userId,1,1)
                 repo.addReminder(newReminder)
             }
 
@@ -66,7 +72,7 @@ class ReminderViewModel (application: Application,
 
             } else{
                if(reminder != null) {
-                   repo.updateReminder(reminder.id, 1, reminder)
+                   repo.updateReminder(reminder.id, userId, reminder)
                    fetchRemindersFromApi()
                }
                else

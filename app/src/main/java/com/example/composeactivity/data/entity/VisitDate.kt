@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class VisitDate (
     val id: Int,
+    val userId: Int,
     val type: VisitType?,
     val foreignId: Int?,
     val doneDate: Long?,

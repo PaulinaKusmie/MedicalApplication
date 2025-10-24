@@ -3,9 +3,13 @@ package com.example.composeactivity.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composeactivity.UserSession
 import com.example.composeactivity.compose.Tools.DateType
 import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.compose.UIStateObject.VisitDateUiState
@@ -14,17 +18,28 @@ import com.example.composeactivity.data.entity.VisitDate
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.repository.VisitDateRepository
 import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.toUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class VisitDateViewModel (application: Application,
-                          private val repo: VisitDateRepository) : AndroidViewModel(application)  {
+@HiltViewModel
+class VisitDateViewModel @Inject constructor ( private val repo: VisitDateRepository) : ViewModel() {
 
     internal val dateVisitUI = mutableStateOf(VisitDateUiState())
     val DateVisitUI : State<VisitDateUiState> = dateVisitUI
 
+    private var userId: Int by mutableStateOf(0)
 
+    init {
+        fetchUserId()
+    }
+
+    fun fetchUserId() = viewModelScope.launch {
+        userId = UserSession.getUserIdOnce()!!
+    }
 
     fun setMode(mode: EntryMode) {
         viewModelScope.launch {
@@ -54,7 +69,7 @@ class VisitDateViewModel (application: Application,
 
 
     suspend fun getVisitDate(id: Int, type :Int): VisitDate? = withContext(Dispatchers.IO) {
-        return@withContext repo.getVisitDate(id, 1, type) // tutaj type zmień na INT
+        return@withContext repo.getVisitDate(id, userId, type) // tutaj type zmień na INT
     }
 
 
@@ -95,7 +110,7 @@ class VisitDateViewModel (application: Application,
             if (id != null) {
                 viewModelScope.launch{
                 try {
-                    repo.clearDate(id, type)
+                    repo.clearDate(id, userId, type)
                     ClearUI(type)
                 }
                 catch (e: Exception) { Log.e("DT", "clearDate: error clearing date", e) }

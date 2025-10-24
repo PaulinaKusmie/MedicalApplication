@@ -1,5 +1,6 @@
 package com.example.composeactivity.compose
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composeactivity.compose.Tools.DateType
 import com.example.composeactivity.compose.Tools.EntryMode
@@ -46,13 +48,13 @@ import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.to
 import com.example.composeactivity.viewmodel.VisitDateViewModel
 import java.time.LocalDateTime
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataAddEditScreen(
     entryMode: EntryMode,
     onBack: () -> Unit,
-    viewModel: VisitDateViewModel = viewModel(),
+    viewModel: VisitDateViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(entryMode) {
         viewModel.setMode(mode = entryMode)

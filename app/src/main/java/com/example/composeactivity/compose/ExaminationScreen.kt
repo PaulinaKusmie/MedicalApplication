@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composeactivity.compose.Tools.GradientSwitch
 import com.example.composeactivity.ui.theme.MainColor
@@ -42,7 +43,7 @@ import com.example.composeactivity.ui.theme.MainColor
 @Composable
 fun ExaminationScreen(navController: NavController,
                       onBack: () -> Unit,
-                      viewModel : ExaminationViewModel = viewModel())
+                      viewModel : ExaminationViewModel = hiltViewModel())
 {
     val examinations by viewModel.examinations.collectAsState(initial = emptyList())
 
@@ -73,9 +74,6 @@ fun ExaminationScreen(navController: NavController,
             examinations.forEach {
                 exam -> ExaminationItem(
                     exam = exam,
-                    onActiveChange = { isActive ->
-                        viewModel.updateIsActive(exam.id, isActive)
-                    },
                     onClick = {
                         examid ->
                         navController.navigate("AddEditVisitExamination/$examid,${exam.name}")
@@ -90,14 +88,13 @@ fun ExaminationScreen(navController: NavController,
 @Composable
 fun ExaminationItem(
     exam: Examination,
-    onActiveChange: (Boolean) -> Unit,
     onClick: (Int) -> Unit
 ) {
-    // Gradienty
+
     val cardGradient = Brush.linearGradient(
         colors = listOf(
-            Color(0xFFF5E6C8), // Jasny beż
-            Color(0xFFD2B48C)  // Klasyczny beż (tan)
+            Color(0xFFF5E6C8),
+            Color(0xFFD2B48C)
         )
     )
     val switchGradient = Brush.linearGradient(
@@ -130,11 +127,7 @@ fun ExaminationItem(
                 letterSpacing = 0.2.sp,
 
             )
-            GradientSwitch(
-                checked = exam.isActive,
-                onCheckedChange = onActiveChange,
-                gradient = switchGradient
-            )
+
         }
     }
 }

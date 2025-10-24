@@ -7,6 +7,7 @@ class VisitDateMapper {
     companion object {
         fun VisitDate.toUiState() = VisitDateUiState(
             id = id,
+            userId = userId,
             type = type,
             foreignId = foreignId,
             doneDate = doneDate,
@@ -16,6 +17,7 @@ class VisitDateMapper {
 
         fun VisitDateUiState.toEntity() = VisitDate(
             id = if (id.toLong() == -1L) 0 else id,
+            userId = userId,
             type = type,
             foreignId = foreignId,
             doneDate = doneDate,

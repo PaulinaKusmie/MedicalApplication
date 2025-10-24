@@ -45,23 +45,23 @@ fun SpecjalizationScreen(
     viewModel : SpecjalizationViewModel = viewModel()) {
     val specjalizations by viewModel.specjalizations.collectAsState(initial = emptyList())
 
-    val specjalizacje = listOf(
-        Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),
-        Specjalization(id = 2, name = "Lekarz rodzinny", isActive = true, sex = 0, isPay = false),
-        Specjalization(id = 3, name = "Kardiolog", isActive = true, sex = 0, isPay = true),
-        Specjalization(id = 4, name = "Dermatolog", isActive = true, sex = 0, isPay = true),
-        Specjalization(id = 5, name = "Psychiatra", isActive = true, sex = 0, isPay = false),
-        Specjalization(id = 6, name = "Ortopeda", isActive = true, sex = 0, isPay = true),
-        Specjalization(id = 7, name = "Endokrynolog", isActive = true, sex = 0, isPay = false),
-        Specjalization(id = 8, name = "Gastroenterolog", isActive = true, sex = 0, isPay = true),
-        Specjalization(id = 9, name = "Neurolog", isActive = true, sex = 0, isPay = false),
-        Specjalization(id = 10, name = "Reumatolog", isActive = true, sex = 0, isPay = false)
-    )
+//    val specjalizacje = listOf(
+//        Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),
+//        Specjalization(id = 2, name = "Lekarz rodzinny", isActive = true, sex = 0, isPay = false),
+//        Specjalization(id = 3, name = "Kardiolog", isActive = true, sex = 0, isPay = true),
+//        Specjalization(id = 4, name = "Dermatolog", isActive = true, sex = 0, isPay = true),
+//        Specjalization(id = 5, name = "Psychiatra", isActive = true, sex = 0, isPay = false),
+//        Specjalization(id = 6, name = "Ortopeda", isActive = true, sex = 0, isPay = true),
+//        Specjalization(id = 7, name = "Endokrynolog", isActive = true, sex = 0, isPay = false),
+//        Specjalization(id = 8, name = "Gastroenterolog", isActive = true, sex = 0, isPay = true),
+//        Specjalization(id = 9, name = "Neurolog", isActive = true, sex = 0, isPay = false),
+//        Specjalization(id = 10, name = "Reumatolog", isActive = true, sex = 0, isPay = false)
+//    )
 
 
     //specjalizacje.forEach { i ->viewModel.addSpecjalization(i) }
 
-   // MyScreen()
+
     Scaffold(
         topBar = {
             TopAppBar( modifier = Modifier.background(MainColor),
@@ -91,12 +91,8 @@ fun SpecjalizationScreen(
                 onActiveChange = { isActive ->
                     viewModel.updateIsActive(spec.id, isActive)
                 },
-                onClick = { specid ->
-                            navController.navigate("AddEditVisitSpecjalization/$specid,${spec.name}") },
-
-
+                onClick = { specid -> navController.navigate("AddEditVisitSpecjalization/$specid,${spec.name}") },
             )
-
             }
         }
     }
@@ -111,7 +107,6 @@ fun SpecjalizationScreen(
         onClick: (Int) -> Unit
 
     ) {
-        // Gradienty
         val cardGradient = Brush.linearGradient(
             colors = listOf(
                 Color(0xFFF5E6C8), // Jasny beż
@@ -121,8 +116,6 @@ fun SpecjalizationScreen(
         val switchGradient = Brush.linearGradient(
             colors = listOf(Color(0xFF6E48AA), Color(0xFF9D50BB))
         )
-      // var showDialog by remember { mutableStateOf(false)}
-
         Surface(
             modifier = Modifier
                 .fillMaxWidth()

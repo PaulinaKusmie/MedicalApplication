@@ -30,7 +30,6 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
     val NavigationEvent = navigationEvent.asSharedFlow()
 
 
-
     fun forgotPassword() {
         viewModelScope.launch {
 

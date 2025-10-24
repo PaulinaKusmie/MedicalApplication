@@ -3,16 +3,18 @@ package com.example.composeactivity.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.repository.SpecjalizationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class SpecjalizationViewModel(application: Application,
-                              private val repo: SpecjalizationRepository) : AndroidViewModel(application) {
+@HiltViewModel
+class SpecjalizationViewModel @Inject constructor (private val repo: SpecjalizationRepository) : ViewModel() {
 
     val specjalizations = repo.allSpecjalizations()
 

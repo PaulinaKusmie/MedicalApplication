@@ -2,8 +2,9 @@ package com.example.composeactivity.repository
 
 import com.example.composeactivity.api.SpecjalizationUserAPI
 import com.example.composeactivity.data.entity.SpecjalizationUser
+import javax.inject.Inject
 
-class SpecjalizationUserRepository(private val specjalizationUserAPI: SpecjalizationUserAPI ) {
+class SpecjalizationUserRepository  @Inject constructor (private val specjalizationUserAPI: SpecjalizationUserAPI ) {
 
      suspend fun addSpecjalizationUser(specjalizationUser: SpecjalizationUser)
      = specjalizationUserAPI.createSpecjalizationUser(specjalizationUser)

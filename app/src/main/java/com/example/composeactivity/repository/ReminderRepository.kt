@@ -11,9 +11,7 @@ import javax.inject.Inject
 
 class ReminderRepository @Inject constructor (private val reminderApi: ReminderAPI) {
 
-     fun allReminder(): Flow<List<Reminder>> = flow{
-            emit(reminderApi.getReminders(1))
-        };
+     fun allReminder(): Flow<List<Reminder>> = flow{ emit(reminderApi.getReminders(1)) };
 
     suspend fun updateReminder(userId : Int, id: Int, reminder: Reminder)
     = reminderApi.updateReminder(userId, id, reminder)

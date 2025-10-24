@@ -43,6 +43,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.utils.ToastManager
@@ -53,22 +54,11 @@ import com.example.composeactivity.viewmodel.Factory.ReminderViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderScreen( navController: NavController,
-                         onBack: () -> Unit)
+                         onBack: () -> Unit,
+                    viewModel: ReminderViewModel  = hiltViewModel())
 {
     val context = LocalContext.current
-    //val repo = remember {
-        //ReminderRepository()
-   // }
-    val viewModel: ReminderViewModel = viewModel(
-        //factory = ReminderViewModelFactory(
-            //LocalContext.current.applicationContext as Application,
-            //repo
-       // )
-    )
-
     val reminders by viewModel.reminders.collectAsState(initial = emptyList())
-
-
 
     LaunchedEffect(Unit) {
         ToastManager.toastEvent.collect { message ->

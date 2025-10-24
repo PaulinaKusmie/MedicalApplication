@@ -6,8 +6,9 @@ import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.UUID
+import javax.inject.Inject
 
-class SpecjalizationRepository(private val specjalizationAPI: SpecjalizationAPI) {
+class SpecjalizationRepository  @Inject constructor (private val specjalizationAPI: SpecjalizationAPI) {
 
 
      fun allSpecjalizations() : Flow<List<Specjalization>> =  flow{

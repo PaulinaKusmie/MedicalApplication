@@ -7,8 +7,9 @@ import com.example.composeactivity.data.entity.VisitDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.UUID
+import javax.inject.Inject
 
-class ExaminationRepository(private val examinationAPI: ExaminationAPI) {
+class ExaminationRepository  @Inject constructor (private val examinationAPI: ExaminationAPI) {
 
      fun  allExamination() :  Flow<List<Examination>>  = flow{
          emit(examinationAPI.getExamination(1))

@@ -13,7 +13,7 @@ class ReminderViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ReminderViewModel(application, repo) as T
+            return ReminderViewModel( repo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
