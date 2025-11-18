@@ -30,14 +30,17 @@ sealed class EntryMode {
 }
 
 enum class DateType {
-    DONE,
-    PREDICTED,
-    APPOITMENT
+    DONE, //0
+    PREDICTED, //1
+    APPOITMENT //2
 }
 
 enum class VisitType {
-    SPECIALIZATION,
-    EXAMINATION
+    SPECIALIZATION, //0
+    EXAMINATION //1
+    ;
+
+    companion object
 }
 
 enum class TimeType {

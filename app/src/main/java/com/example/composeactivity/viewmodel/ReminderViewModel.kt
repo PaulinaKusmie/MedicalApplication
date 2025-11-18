@@ -34,7 +34,7 @@ class ReminderViewModel @Inject constructor (private val repo: ReminderRepositor
     }
 
     fun fetchRemindersFromApi() = viewModelScope.launch {
-        val latest = repo.allReminder().first()
+        val latest = repo.allReminder(userId).first()
         _reminders.value = latest
     }
 
@@ -44,13 +44,12 @@ class ReminderViewModel @Inject constructor (private val repo: ReminderRepositor
 
     fun addReminder() = viewModelScope.launch{
         try {
-
-            val reminders = repo.allReminder().first()
-            if(reminders.any { it.countReminder == 1 && it.typeOfTime == 0 })
+            fetchRemindersFromApi()
+            if(reminders.value.any { it.countReminder == 1 && it.typeOfTime == 0 })
             {
                 ToastManager.showToast("You can't add same reminders")
 
-            }else if (reminders.size > 4)
+            }else if (reminders.value.size > 4)
             {
                 ToastManager.showToast("You have added maximum number of reminders")
             }
@@ -65,8 +64,8 @@ class ReminderViewModel @Inject constructor (private val repo: ReminderRepositor
 
     fun updateReminder(reminder: Reminder) = viewModelScope.launch{
         try {
-            val remindersCopy = repo.allReminder().first()
-            if (remindersCopy.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
+            fetchRemindersFromApi()
+            if (reminders.value.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
             {
                 ToastManager.showToast("You already have this same reminders")
 
@@ -75,11 +74,7 @@ class ReminderViewModel @Inject constructor (private val repo: ReminderRepositor
                    repo.updateReminder(reminder.id, userId, reminder)
                    fetchRemindersFromApi()
                }
-               else
-                   ToastManager.showToast("Something went wrong!")
-
-
-
+               else ToastManager.showToast("Something went wrong!")
             }
 
         } catch (e : Exception){ Log.e("Error", "Fail updated reminder, please try again") }
@@ -93,8 +88,8 @@ class ReminderViewModel @Inject constructor (private val repo: ReminderRepositor
 
 
     suspend fun getLastId() : Int {
-        val reminders = repo.allReminder().first()
-        val lasttId = if (reminders.isEmpty()) 1 else reminders.maxOf { it.id } + 1
+        fetchRemindersFromApi()
+        val lasttId = if (reminders.value.isEmpty()) 1 else reminders.value.maxOf { it.id } + 1
 
         return lasttId
     }

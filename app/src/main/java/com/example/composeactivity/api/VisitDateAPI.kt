@@ -25,7 +25,7 @@ interface VisitDateAPI {
     @PUT("/visitDates")
     suspend fun addVisit(@Body visitDate: VisitDate) : Response<ApiResponse>
 
-    @POST("/visitDates/{id}/{foreignId}/{userId}")
+    @PUT("/visitDates/{id}/{foreignId}/{userId}")
     suspend fun updateDoneDate(
         @Path("id") id: Int,
         @Path("foreignId") foreignId: Int?,
@@ -33,7 +33,7 @@ interface VisitDateAPI {
         @Body visitDate: VisitDate
     ) : Response<Unit>
 
-    @POST("/visitDates/{id}/{foreignId}/{userId}")
+    @PUT("/visitDates/{id}/{foreignId}/{userId}")
     suspend fun updatePredictedDate(
         @Path("id") id: Int,
         @Path("foreignId") foreignId: Int?,
@@ -41,7 +41,7 @@ interface VisitDateAPI {
         @Body visitDate: VisitDate
     ) : Response<Unit>
 
-    @POST("/visitDates/{id}/{foreignId}/{userId}")
+    @PUT("/visitDates/{id}/{foreignId}/{userId}")
     suspend fun updateAppointmentDate(
         @Path("id") id: Int,
         @Path("foreignId") foreignId: Int?,

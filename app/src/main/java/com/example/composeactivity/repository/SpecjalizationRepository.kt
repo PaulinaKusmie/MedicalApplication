@@ -11,9 +11,7 @@ import javax.inject.Inject
 class SpecjalizationRepository  @Inject constructor (private val specjalizationAPI: SpecjalizationAPI) {
 
 
-     fun allSpecjalizations() : Flow<List<Specjalization>> =  flow{
-        emit(specjalizationAPI.getSpecjalizations(1))
-    }
+     fun allSpecjalizations(userId: Int) : Flow<List<Specjalization>> =  flow{ emit(specjalizationAPI.getSpecjalizations(userId)) }
 
     //suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
 

@@ -1,5 +1,8 @@
 package com.example.composeactivity.viewmodel
 
+import com.example.composeactivity.compose.Tools.VisitType
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -48,3 +51,7 @@ class  Converter {
      }
 
  }
+
+
+
+

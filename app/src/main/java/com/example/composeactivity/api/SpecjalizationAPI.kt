@@ -7,6 +7,6 @@ import retrofit2.http.Path
 
 interface SpecjalizationAPI {
 
-    @GET("/specjalization/{userId}")
+    @GET("/specjalizations/{userId}")
     suspend fun getSpecjalizations(@Path("userId") userId : Int) : List<Specjalization>
 }

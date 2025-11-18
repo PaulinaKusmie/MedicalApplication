@@ -46,6 +46,7 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
                  val loginRequest = LoginRequest(email, password)
                  var result = userRespository.login(loginRequest)
                   if (result.isSuccessful){
+                      Log.e("API_ERROR", (result.body()?.id!!).toString())
                       UserSession.saveUserId(result.body()?.id!!)
                       message = "Sucessful! hello " + result.body()?.name!!
                       delay(3000)

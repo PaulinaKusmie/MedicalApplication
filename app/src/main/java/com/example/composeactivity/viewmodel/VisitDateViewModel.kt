@@ -41,20 +41,22 @@ class VisitDateViewModel @Inject constructor ( private val repo: VisitDateReposi
         userId = UserSession.getUserIdOnce()!!
     }
 
+
+
     fun setMode(mode: EntryMode) {
         viewModelScope.launch {
             try {
                 when (mode) {
 
                     is EntryMode.AddSpecjalizationVisit -> {
-                        val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, 0) //SPECIALIZATION
+                        val visitDate: VisitDate? = getVisitDate(mode.specjalizationId, userId) //SPECIALIZATION
                         val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.specjalizationId, type = VisitType.SPECIALIZATION)
                         dateVisitUI.value = uiState.copy(name = mode.name)
 
                     }
 
                     is EntryMode.AddExaminationVisit -> {
-                        val visitDate: VisitDate? = getVisitDate(mode.examinationId,0 ) //VisitType.EXAMINATION
+                        val visitDate: VisitDate? = getVisitDate(mode.examinationId,userId ) //VisitType.EXAMINATION
                         val uiState = visitDate?.toUiState() ?: VisitDateUiState(foreignId = mode.examinationId, type = VisitType.EXAMINATION)
                         dateVisitUI.value = uiState.copy(name = mode.name)
 
@@ -76,10 +78,16 @@ class VisitDateViewModel @Inject constructor ( private val repo: VisitDateReposi
      fun updateDoneDate(visitDate: VisitDate) {
          viewModelScope.launch {
              try{
-             if (visitDate.id != 0)
+             if (visitDate.id != 0) {
+                 Log.w("DT", "clearDate: was null")
                  repo.updateDoneDate(visitDate)
+             }
              else
+             {
+                 Log.e("API_ERROR addVisit", userId.toString())
                  repo.addVisit(visitDate)
+             }
+
             } catch (e : Exception){ Log.e("Error", "on create or update DoneDate")}
          }
     }

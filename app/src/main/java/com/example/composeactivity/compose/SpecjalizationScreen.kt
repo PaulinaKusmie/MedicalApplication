@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.composeactivity.compose.Tools.GradientSwitch
@@ -42,7 +43,7 @@ import com.example.composeactivity.viewmodel.SpecjalizationViewModel
 fun SpecjalizationScreen(
     navController: NavController,
     onBack: () -> Unit,
-    viewModel : SpecjalizationViewModel = viewModel()) {
+    viewModel : SpecjalizationViewModel = hiltViewModel()) {
     val specjalizations by viewModel.specjalizations.collectAsState(initial = emptyList())
 
 //    val specjalizacje = listOf(

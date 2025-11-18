@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class VisitDateRepository  @Inject constructor(private val visitDateAPI: VisitDateAPI) {
 
-    suspend fun allVisitDate() = visitDateAPI.getVisitDates(1);
+    suspend fun allVisitDate(userId : Int) = visitDateAPI.getVisitDates(userId);
 
     suspend fun getVisitDate(foreignId : Int, userId : Int , type :Int ) = visitDateAPI.getVisitDateByForeignIdAndType(foreignId, userId,  type)
 
