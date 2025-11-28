@@ -1,5 +1,6 @@
 package com.example.composeactivity.repository
 
+import android.util.Log
 import com.example.composeactivity.api.ApiClient
 import com.example.composeactivity.api.ReminderAPI
 import com.example.composeactivity.compose.Tools.TimeType
@@ -13,11 +14,10 @@ class ReminderRepository @Inject constructor (private val reminderApi: ReminderA
 
      fun allReminder(userId: Int): Flow<List<Reminder>> = flow{ emit(reminderApi.getReminders(userId)) };
 
-    suspend fun updateReminder(userId : Int, id: Int, reminder: Reminder)
-    = reminderApi.updateReminder(userId, id, reminder)
+    suspend fun updateReminder(userId : Int, id: Int, reminder: Reminder) = reminderApi.updateReminder(userId, id, reminder)
 
     suspend fun addReminder(reminder: Reminder) = reminderApi.addReminder(reminder)
 
-    suspend fun deleteReminder(reminder: Reminder) = reminderApi.deleteReminder(reminder.id,1)
+    suspend fun deleteReminder(reminder: Reminder, userId :Int) = reminderApi.deleteReminder(reminder.id, userId )
 
 }

@@ -26,8 +26,6 @@ import kotlin.Int
 @HiltViewModel
 class SpecjalizationViewModel @Inject constructor (private val repo: SpecjalizationRepository) : ViewModel() {
 
-    //val specjalizations = repo.allSpecjalizations()
-
     private val _specjalizations = MutableStateFlow<List<Specjalization>>(emptyList())
     val specjalizations: StateFlow<List<Specjalization>> = _specjalizations
 
@@ -52,20 +50,20 @@ class SpecjalizationViewModel @Inject constructor (private val repo: Specjalizat
          fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
              try {
             //repo.updateActive(id, isActive)
-             } catch (e : Exception){ Log.e("Error", "Fail updated active state specjalization") }
+             } catch (e : Exception){ Log.e("Error", "Fail updated active state specjalization "+ e.printStackTrace()) }
 
         }
 
         fun addSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
             try {
             //repo.addSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail added specjalization") }
+            } catch (e : Exception){ Log.e("Error", "Fail added specjalization " + e.printStackTrace()) }
         }
 
         fun deleteSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
             try {
             //repo.deleteSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail deleted specjalization") }
+            } catch (e : Exception){ Log.e("Error", "Fail deleted specjalization " +  e.printStackTrace()) }
         }
 
 

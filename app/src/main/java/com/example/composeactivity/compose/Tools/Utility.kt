@@ -37,10 +37,8 @@ enum class DateType {
 
 enum class VisitType {
     SPECIALIZATION, //0
-    EXAMINATION //1
-    ;
+    EXAMINATION ;//1
 
-    companion object
 }
 
 enum class TimeType {

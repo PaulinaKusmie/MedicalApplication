@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                         val id = it.arguments?.getInt("examinationId")!!
                         val name = it.arguments?.getString("name")!!
                         DataAddEditScreen(
-                            entryMode = EntryMode.AddSpecjalizationVisit(id, name),
+                            entryMode = EntryMode.AddExaminationVisit(id, name),
                             onBack = { navController.popBackStack() })
                     }
                 }

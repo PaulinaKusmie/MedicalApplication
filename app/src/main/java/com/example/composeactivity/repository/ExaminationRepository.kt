@@ -11,9 +11,7 @@ import javax.inject.Inject
 
 class ExaminationRepository  @Inject constructor (private val examinationAPI: ExaminationAPI) {
 
-     fun  allExamination() :  Flow<List<Examination>>  = flow{
-         emit(examinationAPI.getExamination(1))
-     }
+     fun  allExamination(userId: Int) :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getExamination(userId)) }
 
     //suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
 

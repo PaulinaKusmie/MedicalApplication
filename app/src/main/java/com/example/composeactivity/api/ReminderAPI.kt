@@ -23,7 +23,7 @@ interface ReminderAPI {
         @Body reminder: Reminder
     ):  Response<Unit>
 
-    @POST("/reminders")
+    @PUT("/reminders")
     suspend fun addReminder(@Body reminder: Reminder):  Response<ApiResponse>
 
     @DELETE("/reminders/{id}/{userId}")

@@ -1,6 +1,7 @@
 package com.example.composeactivity.compose
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,11 +57,16 @@ fun DataAddEditScreen(
     onBack: () -> Unit,
     viewModel: VisitDateViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(entryMode) {
+
+    val dateVisitState = viewModel.DateVisitUI.value
+    val userId = viewModel.userId
+
+
+    if(userId > 0){
         viewModel.setMode(mode = entryMode)
     }
 
-    val dateVisitState = viewModel.DateVisitUI.value
+
 
     Scaffold(
         topBar = {
@@ -96,7 +102,6 @@ fun DataAddEditScreen(
             var showDialog by remember { mutableStateOf(false) }
             val pickedDate = remember { mutableStateOf<LocalDateTime?>(null) }
             val editingType = remember { mutableStateOf<DateType?>(null) }
-
 
 
             DateSection(

@@ -9,6 +9,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -23,3 +24,13 @@ data class VisitDate (
     val appointmentDate: Long?,
 )
 
+
+@Serializable data class VisitDateDTO (
+    val id: Int,
+    val userId: Int,
+    val type: Int?,
+    val foreignId: Int?,
+    val doneDate: String?,
+    val predictedDate: String?,
+    val appointmentDate: String?,
+    )
