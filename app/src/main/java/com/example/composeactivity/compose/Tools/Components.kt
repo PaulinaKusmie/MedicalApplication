@@ -90,7 +90,7 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
                     currentDate.hour,
                     currentDate.minute
                 ),
-                minDateTime = LocalDateTime.now(),
+                minDateTime = LocalDateTime.now(), ////tu zmiennnnnn
                 maxDateTime = LocalDateTime.of(
                     currentDate.year + 50,
                     currentDate.month,

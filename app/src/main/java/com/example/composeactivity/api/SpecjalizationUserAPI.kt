@@ -11,13 +11,16 @@ import retrofit2.http.Path
 
 interface SpecjalizationUserAPI {
 
-    @PUT("/specjalizationUsers")
-    suspend fun createSpecjalizationUser(@Body specjalizationUser: SpecjalizationUser) : Response<ApiResponse>
-
-    @DELETE("/specjalizationUsers/{id}/{userId}")
-    suspend fun deleteSpecjalizationUser(
-        @Path("id") id : Int,
+    @PUT("/specjalizationUsers/{specjalizationId}/{userId}")
+    suspend fun createSpecjalizationUser(
+        @Path("specjalizationId") specjalizationId : Int,
         @Path("userId") userId : Int
-    ) : ApiResponse
+    ) : Response<ApiResponse>
+
+    @DELETE("/specjalizationUsers/{specjalizationId}/{userId}")
+    suspend fun deleteSpecjalizationUser(
+        @Path("specjalizationId") specjalizationId : Int,
+        @Path("userId") userId : Int
+    ) : Response<Unit>
 }
 

@@ -12,12 +12,15 @@ import retrofit2.http.Path
 
 interface ExaminationUserAPI {
 
-    @PUT("/examinationUsers")
-    suspend fun createExaminationUser(@Body examinationUser: ExaminationUser) : Response<ApiResponse>
-
-    @DELETE("/examinationUsers/{id}/{userId}")
-    suspend fun deleteExaminationUser(
-        @Path("id") id : Int,
+    @PUT("/examinationUsers/{examinationId}/{userId}")
+    suspend fun createExaminationUser(
+        @Path("examinationId") examinationId : Int,
         @Path("userId") userId : Int
-    ) : ApiResponse
+    ) : Response<ApiResponse>
+
+    @DELETE("/examinationUsers/{examinationId}/{userId}")
+    suspend fun deleteExaminationUser(
+        @Path("examinationId") examinationId : Int,
+        @Path("userId") userId : Int
+    ) : Response<Unit>
 }

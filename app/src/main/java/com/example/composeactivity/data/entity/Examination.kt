@@ -1,11 +1,12 @@
 package com.example.composeactivity.data.entity
+import com.example.composeactivity.utils.Named
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-data class Examination(
-    val id: Int,
-    val name: String,
+data class Examination (
+    override val id: Int,
+    override val name: String,
     val isActive: Boolean,
     val ageFrom: Int,
     val frequency: Int, // year between examination
@@ -13,4 +14,5 @@ data class Examination(
     val isPay: Boolean,
     val isRefundable: Boolean,
     val description: String,
- )
+    override val isVerificated :Boolean
+ ) : Named

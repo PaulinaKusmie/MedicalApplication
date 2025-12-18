@@ -61,12 +61,9 @@ fun DataAddEditScreen(
     val dateVisitState = viewModel.DateVisitUI.value
     val userId = viewModel.userId
 
-
     if(userId > 0){
         viewModel.setMode(mode = entryMode)
     }
-
-
 
     Scaffold(
         topBar = {

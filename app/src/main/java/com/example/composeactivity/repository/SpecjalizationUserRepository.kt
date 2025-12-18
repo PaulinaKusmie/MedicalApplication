@@ -6,9 +6,9 @@ import javax.inject.Inject
 
 class SpecjalizationUserRepository  @Inject constructor (private val specjalizationUserAPI: SpecjalizationUserAPI ) {
 
-     suspend fun addSpecjalizationUser(specjalizationUser: SpecjalizationUser)
-     = specjalizationUserAPI.createSpecjalizationUser(specjalizationUser)
+     suspend fun addSpecjalizationUser(specjalizationId:Int, userId:Int)
+     = specjalizationUserAPI.createSpecjalizationUser(specjalizationId, userId)
 
-     suspend fun deleteSpecjalizationUser(specjalizationUser: SpecjalizationUser)
-     = specjalizationUserAPI.deleteSpecjalizationUser(specjalizationUser.id, specjalizationUser.userId)
+     suspend fun deleteSpecjalizationUser(specjalizationId:Int, userId:Int)
+     = specjalizationUserAPI.deleteSpecjalizationUser(specjalizationId, userId)
 }

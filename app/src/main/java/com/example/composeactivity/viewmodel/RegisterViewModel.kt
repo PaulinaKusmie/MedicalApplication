@@ -1,5 +1,6 @@
 package com.example.composeactivity.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,13 +20,9 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
 
 
     var email by mutableStateOf("")
-
     var password by mutableStateOf("")
-
     var name by mutableStateOf("")
-
     var age by mutableStateOf("")
-
     var message by mutableStateOf("")
 
     private val navigationEvent = MutableSharedFlow<Boolean>()
@@ -34,28 +31,30 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
 
 
     fun register() {
-        viewModelScope.launch {
-            if (email.isBlank() || password.isBlank() || name.isBlank() || age.toInt() == 0) {
-                message = "Wypełnij wszystkie pola"
-            } else {
-                var user = User(
-                    0,
-                    email,
-                    password,
-                    age.toInt() ,
-                    name,
-                    null
-                )
-               var result = userRespository.register(user)
-                if(result.isSuccessful) {
-                    message = "Zarejestrowano użytkownika"
-                    delay(3000)
-                    navigationEvent.emit(true)
+        try {
+            viewModelScope.launch {
+                if (email.isBlank() || password.isBlank() || name.isBlank() || age.toInt() == 0) {
+                    message = "Wypełnij wszystkie pola"
+                } else {
+                    var user = User(
+                        0,
+                        email,
+                        password,
+                        age.toInt(),
+                        name,
+                        null
+                    )
+                    var result = userRespository.register(user)
+                    if (result.isSuccessful) {
+                        message = "Zarejestrowano użytkownika"
+                        delay(3000)
+                        navigationEvent.emit(true)
+                    } else
+                        message = "Something went wrong! Try again!"
                 }
-                else
-                    message = "Something went wrong! Try again!"
             }
         }
+        catch (e : Exception){ Log.e("Error", "Fail registration please try again " + e.printStackTrace()) }
     }
 
     fun clearMessage() {

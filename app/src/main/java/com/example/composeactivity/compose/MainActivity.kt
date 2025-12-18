@@ -72,6 +72,16 @@ class MainActivity : ComponentActivity() {
                             navController,
                             onBack = { navController.popBackStack() })
                     }
+                    composable("SettingsSpecjalizationScreen") {
+                        SettingsSpecjalizationScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
+                    composable("SettingsExaminationScreen") {
+                        SettingsExaminationScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
                     composable(
                         route = "AddEditVisitSpecjalization/{specjalizationId},{name}",
                         arguments = listOf(

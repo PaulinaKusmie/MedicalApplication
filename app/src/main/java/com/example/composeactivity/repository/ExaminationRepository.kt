@@ -11,12 +11,12 @@ import javax.inject.Inject
 
 class ExaminationRepository  @Inject constructor (private val examinationAPI: ExaminationAPI) {
 
-     fun  allExamination(userId: Int) :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getExamination(userId)) }
+     fun  getAllExamination() :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getAllExamination()) }
 
-    //suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
+     fun  getExamination(userId: Int) :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getExamination(userId)) }
 
-    ///suspend fun addExamination(examination: Examination) = dao.insert(examination)
+    suspend fun addExamination(userid: Int, name: String) = examinationAPI.addExamination(userid,name)
 
-    //suspend fun deleteExamination(examination: Examination) = dao.delete(examination)
+    suspend fun deleteExamination(id: Int, userid: Int) = examinationAPI.deleteExamination(id,userid)
 
 }

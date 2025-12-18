@@ -43,19 +43,9 @@ class ExaminationViewModel @Inject constructor (private val repo: ExaminationRep
     }
 
     suspend fun fetchExaminationsFromApi()  {
-        val latest = repo.allExamination(userId).first()
+        val latest = repo.getExamination(userId).first().sortedBy {it.name}
         _examinations.value = latest
     }
 
-     fun addExamination(examination: Examination) = viewModelScope.launch{
-         try {
-       // repo.addExamination(examination)
-         } catch (e : Exception){ Log.e("Error", "Fail added examination " + e.printStackTrace()) }
-     }
 
-      fun deleteExamination(examination: Examination) = viewModelScope.launch{
-          try {
-       //repo.deleteExamination(examination)
-      } catch (e : Exception){ Log.e("Error", "Fail deleted examination" + e.printStackTrace()) }
-     }
 }

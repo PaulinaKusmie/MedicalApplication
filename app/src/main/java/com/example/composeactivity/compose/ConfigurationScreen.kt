@@ -76,19 +76,38 @@ fun ConfigurationScreen(
                    text = "Przypomnienia")
            }
            Spacer(modifier = Modifier.height(20.dp))
+
            Card(
                modifier = Modifier
                    .background(MainColor)
                    .border(1.dp,  brush = switchGradient, shape = RoundedCornerShape(15.dp))
                    .fillMaxWidth(),
 
-               onClick = {}
+               onClick = { navController.navigate("SettingsSpecjalizationScreen")}
 
            ) {
                Text(modifier = Modifier
                    .background(MainColor)
                    .fillMaxWidth(),
-                   text = "Dodaj aktywność",
+                   text = "Zarządzanie wizytami",
+                   textAlign = TextAlign.Center)
+           }
+           
+           Spacer(modifier = Modifier.height(20.dp))
+
+           Card(
+               modifier = Modifier
+                   .background(MainColor)
+                   .border(1.dp,  brush = switchGradient, shape = RoundedCornerShape(15.dp))
+                   .fillMaxWidth(),
+
+               onClick = {  navController.navigate("SettingsExaminationScreen")}
+
+           ) {
+               Text(modifier = Modifier
+                   .background(MainColor)
+                   .fillMaxWidth(),
+                   text = "Zarządzanie badaniami",
                    textAlign = TextAlign.Center)
            }
        }

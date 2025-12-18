@@ -89,9 +89,6 @@ fun SpecjalizationScreen(
             specjalizations.forEach {
                     spec -> SpecjalizationItem(
                 spec = spec,
-                onActiveChange = { isActive ->
-                    viewModel.updateIsActive(spec.id, isActive)
-                },
                 onClick = { specid -> navController.navigate("AddEditVisitSpecjalization/$specid,${spec.name}") },
             )
             }
@@ -104,7 +101,6 @@ fun SpecjalizationScreen(
     @Composable
     fun SpecjalizationItem(
         spec : Specjalization,
-        onActiveChange: (Boolean) -> Unit,
         onClick: (Int) -> Unit
 
     ) {
@@ -143,11 +139,7 @@ fun SpecjalizationScreen(
                     letterSpacing = 0.2.sp,
 
                     )
-                GradientSwitch(
-                    checked = spec.isActive,
-                    onCheckedChange = onActiveChange,
-                    gradient = switchGradient
-                )
+
             }
         }
 

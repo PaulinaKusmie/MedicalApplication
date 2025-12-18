@@ -11,15 +11,13 @@ import javax.inject.Inject
 
 class SpecjalizationRepository  @Inject constructor (private val specjalizationAPI: SpecjalizationAPI) {
 
+     fun getAllSpecjalizations(): Flow<List<Specjalization>> = flow { emit(specjalizationAPI.getAllSpecjalizations()) }
 
-     suspend fun allSpecjalizations(userId: Int): Flow<List<Specjalization>> = flow { emit(specjalizationAPI.getSpecjalizations(userId)) }
+     fun getSpecjalizations(userId: Int): Flow<List<Specjalization>> = flow { emit(specjalizationAPI.getSpecjalizations(userId)) }
 
+     suspend fun addSpecjalization(userid: Int, name: String) = specjalizationAPI.addSpecjalization(userid,name)
 
-          //suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
-
-          // suspend fun addSpecjalization(specjalization: Specjalization) = dao.insert(specjalization)
-
-          // suspend fun deleteSpecjalization(specjalization: Specjalization) = dao.delete(specjalization)
+     suspend fun deleteSpecjalization(id: Int, userid: Int) = specjalizationAPI.deleteSpecjalization(id,userid)
 
 
 }

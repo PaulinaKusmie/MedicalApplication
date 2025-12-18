@@ -43,30 +43,9 @@ class SpecjalizationViewModel @Inject constructor (private val repo: Specjalizat
     }
 
     suspend fun fetchsSpecjalizationsFromApi()  {
-        val latest = repo.allSpecjalizations(userId).first()
+        val latest = repo.getSpecjalizations(userId).first().sortedBy {it.name}
         _specjalizations.value = latest
     }
-
-         fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
-             try {
-            //repo.updateActive(id, isActive)
-             } catch (e : Exception){ Log.e("Error", "Fail updated active state specjalization "+ e.printStackTrace()) }
-
-        }
-
-        fun addSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
-            try {
-            //repo.addSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail added specjalization " + e.printStackTrace()) }
-        }
-
-        fun deleteSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
-            try {
-            //repo.deleteSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail deleted specjalization " +  e.printStackTrace()) }
-        }
-
-
 
 }
 

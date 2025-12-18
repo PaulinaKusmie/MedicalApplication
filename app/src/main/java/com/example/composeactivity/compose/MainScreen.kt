@@ -51,11 +51,11 @@ fun MainScreen(navController: NavController) {
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 GenerateButton("Wizyty") {
-                    navController.navigate("ExaminationScreen")
+                    navController.navigate("SpecjalizationScreen")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 GenerateButton("Badania medyczne") {
-                    navController.navigate("SpecjalizationScreen")
+                    navController.navigate("ExaminationScreen")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(modifier = Modifier.height(80.dp).width(310.dp),

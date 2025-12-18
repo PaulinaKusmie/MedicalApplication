@@ -98,10 +98,8 @@ class VisitDateViewModel @Inject constructor ( private val repo: VisitDateReposi
      fun updatePredictedDate(visitDate: VisitDate) {
          viewModelScope.launch {
              try{
-
              if (visitDate.id != 0) repo.updatePredictedDate(visitDate.toDTO())
              else repo.addVisit(visitDate.toDTO())
-
              } catch (e : Exception){ Log.e("Error", "on create or update PredictedDate " + e.printStackTrace())}
          }
     }

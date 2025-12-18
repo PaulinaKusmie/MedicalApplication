@@ -7,10 +7,10 @@ import javax.inject.Inject
 
 class ExaminationUserRepository  @Inject constructor (private val examinationUserAPI: ExaminationUserAPI) {
 
-    suspend fun addExaminationUser(examinationUser: ExaminationUser)
-            = examinationUserAPI.createExaminationUser(examinationUser)
+    suspend fun addExaminationUser(examinationId:Int, userId:Int)
+            = examinationUserAPI.createExaminationUser(examinationId, userId)
 
-    suspend fun deleteExaminationUser(examinationUser: ExaminationUser)
-            = examinationUserAPI.deleteExaminationUser(examinationUser.id, examinationUser.userId)
+    suspend fun deleteExaminationUser(examinationId:Int, userId:Int)
+            = examinationUserAPI.deleteExaminationUser(examinationId, userId)
 
 }

@@ -49,7 +49,8 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
                       UserSession.saveUserId(result.body()?.id!!)
                       message = "Sucessful! hello " + result.body()?.name!!
                       delay(3000)
-                      navigationEvent.emit(true) }
+                      navigationEvent.emit(true)
+                  }
                  else message = "Something went wrong! Try again!"
              }
              } catch(e: Exception) {
