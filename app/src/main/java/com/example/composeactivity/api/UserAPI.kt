@@ -1,6 +1,7 @@
 package com.example.composeactivity.api
 
 import com.example.composeactivity.data.dto.ApiResponse
+import com.example.composeactivity.data.dto.ConfirmAccountRequest
 import com.example.composeactivity.data.dto.LoginRequest
 import com.example.composeactivity.data.entity.User
 import retrofit2.Response
@@ -23,5 +24,8 @@ interface UserAPI  {
 
     @POST("users/{email}")
     suspend fun forgotPassword(@Path("email") email: String): Response<ApiResponse>
+
+    @POST("users/confirmCode")
+    suspend fun confirmCode(@Body requestAccountRequest: ConfirmAccountRequest): Response<Unit>
 }
 
