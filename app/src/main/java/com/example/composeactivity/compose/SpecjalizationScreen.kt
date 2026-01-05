@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,22 +47,6 @@ fun SpecjalizationScreen(
     onBack: () -> Unit,
     viewModel : SpecjalizationViewModel = hiltViewModel()) {
     val specjalizations by viewModel.specjalizations.collectAsState(initial = emptyList())
-
-//    val specjalizacje = listOf(
-//        Specjalization(id = 1, name = "Internista", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 2, name = "Lekarz rodzinny", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 3, name = "Kardiolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 4, name = "Dermatolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 5, name = "Psychiatra", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 6, name = "Ortopeda", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 7, name = "Endokrynolog", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 8, name = "Gastroenterolog", isActive = true, sex = 0, isPay = true),
-//        Specjalization(id = 9, name = "Neurolog", isActive = true, sex = 0, isPay = false),
-//        Specjalization(id = 10, name = "Reumatolog", isActive = true, sex = 0, isPay = false)
-//    )
-
-
-    //specjalizacje.forEach { i ->viewModel.addSpecjalization(i) }
 
 
     Scaffold(
@@ -81,13 +67,18 @@ fun SpecjalizationScreen(
         containerColor = MainColor
 
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement =  Arrangement.spacedBy(4.dp)
+
         ) {
-            specjalizations.forEach {
-                    spec -> SpecjalizationItem(
+            items(count = specjalizations.size,
+                key = {index -> specjalizations[index].id}) {
+                index ->
+                val spec = specjalizations[index]
+                SpecjalizationItem(
                 spec = spec,
                 onClick = { specid -> navController.navigate("AddEditVisitSpecjalization/$specid,${spec.name}") },
             )

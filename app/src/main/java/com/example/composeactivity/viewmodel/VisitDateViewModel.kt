@@ -84,6 +84,8 @@ class VisitDateViewModel @Inject constructor ( private val repo: VisitDateReposi
     fun updateDoneDate(visitDate: VisitDate) {
          viewModelScope.launch {
              try{
+
+                 Log.d("Error", "co tam? " +  visitDate.toString())
              if (visitDate.id != 0) {
                  repo.updateDoneDate(visitDate.toDTO())
              }

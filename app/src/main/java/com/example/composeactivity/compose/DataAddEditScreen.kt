@@ -72,7 +72,7 @@ fun DataAddEditScreen(
                     Text(
                         text = dateVisitState.name ?: "Edytuj Dane",
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            fontFamily = FontFamily.Monospace, // Możesz podmienić np. na FontFamily.Cursive lub własny font
+                            fontFamily = FontFamily.Monospace,
                             color = Color.Black,
                             fontWeight = FontWeight.Light
                         )
@@ -166,7 +166,8 @@ fun DataAddEditScreen(
                         }
                         editingType.value = null
                     },
-                    dateTime = pickedDate
+                    dateTime = pickedDate,
+                    editingType.value == DateType.DONE
 
                 )
             }

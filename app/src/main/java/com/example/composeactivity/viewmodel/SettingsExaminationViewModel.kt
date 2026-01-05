@@ -1,6 +1,7 @@
 package com.example.composeactivity.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,7 @@ import com.example.composeactivity.utils.Utils.Companion.isNameOnList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.Normalizer
@@ -33,8 +35,33 @@ class SettingsExaminationViewModel @Inject constructor (private val repoExam: Ex
     val activeExaminations: StateFlow<List<Examination>> = _activeExaminations
 
 
+    private val _showDialog = MutableStateFlow(false)
+    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
+
+    fun getShowDialog(): Boolean = showDialog.value
+    fun setShowDialog(value: Boolean) {
+        _showDialog.value = value
+    }
+
+    private val _addedAlert = MutableStateFlow<String?>(null)
+    val addedAlert = _addedAlert.asStateFlow()
+
+    fun getAddedAlert(): String? = _addedAlert.value
+    fun setAddedAlert(value: String?) {
+        _addedAlert.value = value
+    }
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage = _errorMessage.asStateFlow()
+
+    fun getErrorMessage(): String? = _errorMessage.value
+    fun setErrorMessage(value: String?) {
+        _errorMessage.value = value
+    }
+
     private var userId: Int by mutableStateOf(0)
-     var name: String by mutableStateOf("")
+
+
 
     init {
         viewModelScope.launch {
@@ -67,23 +94,35 @@ class SettingsExaminationViewModel @Inject constructor (private val repoExam: Ex
     }
 
 
-    fun addExamination() {
+    fun addExamination(nameExam : String) {
         viewModelScope.launch {
             try {
-
-                if (!(isNameOnList(name, (_examinations.value as List<Object>)))) {
-                    repoExam.addExamination(userId, name)
-                    fetchExaminationsFromApi()
-                    fetchActiveExaminationsFromApi()
-                } else {
-                    ToastManager.showToast("Badanie juz istnieje poszukaj na liście")
+                if(nameExam.isBlank()) {
+                setErrorMessage("Nazwa badania nie może być pusta")
+                    return@launch
                 }
+                val examinations = _examinations.value as? List<Object> ?: emptyList()
+
+                if ((isNameOnList(nameExam, examinations))) {
+                    setErrorMessage("Badanie juz istnieje poszukaj na liście")
+                    return@launch
+                }
+
+                val resp = repoExam.addExamination(userId, nameExam)
+                if(resp.isSuccessful){
+                    clearToastMessage()
+                    setShowDialog(false)
+                    setAddedAlert("Badanie zostało dodane poprawnie, poczekaj na autoryzcję ok. 1-2 dni")
+                } else setErrorMessage(resp.message())
+
+
+
             } catch (e: Exception) {
-                Log.e("Error", "Fail added examination " + e.printStackTrace())
+                Log.e("Error", "Fail added examination " + e)
+                setErrorMessage("Wystąpił błąd podczas dodawania badania")
             }
         }
     }
-
 
 
     fun deleteExamination(exam: Examination) = viewModelScope.launch {
@@ -94,5 +133,10 @@ class SettingsExaminationViewModel @Inject constructor (private val repoExam: Ex
             } catch (e: Exception) {
                 Log.e("Error", "Fail deleted examination" + e.printStackTrace())
             }
+    }
+
+
+    fun clearToastMessage() {
+        _errorMessage.value = null
     }
 }

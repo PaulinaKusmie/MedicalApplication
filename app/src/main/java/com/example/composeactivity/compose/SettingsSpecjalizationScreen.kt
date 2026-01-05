@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.composeactivity.compose.Tools.SimpleDialog
 import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.SettingsSpecjalizationViewModel
@@ -54,7 +55,15 @@ fun SettingsSpecjalizationScreen(
 
     val specjalizations by viewModel.specjalizations.collectAsState(initial = emptyList())
     val activeSpecjalizations by viewModel.activeSpecjalizations.collectAsState(initial = emptyList())
-    var showDialog: Boolean by remember{ mutableStateOf(false)}
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val showDialog by viewModel.showDialog.collectAsState()
+    val addedAlert by viewModel.addedAlert.collectAsState()
+
+    addedAlert?.let{
+        SimpleDialog(
+            message = addedAlert.toString(),
+            onDismiss = {viewModel.setAddedAlert(null)})
+    }
 
     Scaffold(
         topBar = {
@@ -70,16 +79,29 @@ fun SettingsSpecjalizationScreen(
                 },
             )
         },
-        containerColor = MainColor
+        containerColor = MainColor,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.setShowDialog(true)
+                },
+            )
+            {
+                Icon(Icons.Default.Add, contentDescription = "Dodaj")
+            }
+        }
 
     ) { padding ->
-        Column(
+        LazyColumn (
             modifier = Modifier
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            specjalizations.forEach {
-                    spec ->
+            items(count = specjalizations.size,
+                key = {index -> specjalizations[index].id
+                }) { index ->
+                val spec = specjalizations[index]
                 SettingsSpecjalizationItem(
                     spec = spec,
                     isActive = activeSpecjalizations.any { it.id == spec.id },
@@ -94,14 +116,7 @@ fun SettingsSpecjalizationScreen(
                 )
 
             }
-            FloatingActionButton(
-                onClick = {
-                    showDialog = true
-                },
-            )
-            {
-                Icon(Icons.Default.Add, contentDescription = "Dodaj")
-            }
+
         }
 
 
@@ -109,9 +124,10 @@ fun SettingsSpecjalizationScreen(
 
     if(showDialog){
         AddSpecjalization(
-            OnConfirm = {viewModel.name = it},
-            viewModel.addSpecjalization(),
-            onDismissRequest = {showDialog = false},
+            errorMessage = errorMessage,
+            OnConfirm = { viewModel.addSpecjalization(it) },
+            onDismiss = { viewModel.setShowDialog(false)
+            viewModel.setErrorMessage(null)}
         )
     }
 }
@@ -128,9 +144,6 @@ fun SettingsSpecjalizationItem(
             Color(0xFFF5E6C8),
             Color(0xFFD2B48C)
         )
-    )
-    val switchGradient = Brush.linearGradient(
-        colors = listOf(Color(0xFF6E48AA), Color(0xFF9D50BB))
     )
 
     Surface(
@@ -175,36 +188,61 @@ fun SettingsSpecjalizationItem(
     }
 
 }
+
 @Composable
 fun AddSpecjalization(
+    errorMessage: String?,
     OnConfirm: (String) -> Unit,
-    onDismissRequest1: Job,
-    onDismissRequest: () -> Unit
+    onDismiss:() -> Unit
 ){
     var nameOfSpecjalization = remember { mutableStateOf("") }
     AlertDialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = onDismiss,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp),
 
         title = {
-            Text(modifier = Modifier.background(MainColor),
-                text = "Dodaj wizytę")},
+            Text(modifier = Modifier.padding(5.dp),
+                text = "Dodaj wizytę")
+                },
+
         text  = {
-            TextField(value = nameOfSpecjalization.value,
-                onValueChange = {nameOfSpecjalization.value = it},
-                label = {Text(" ")}
-            )
+            Column (modifier = Modifier.padding(5.dp)){
+                TextField(
+                    value = nameOfSpecjalization.value,
+                    onValueChange = {nameOfSpecjalization.value = it},
+                    label = {Text(" ")},
+                    isError = errorMessage != null
+                )
+                errorMessage?.let{
+                    Text(
+                        text = it,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(4.dp),
+                        color = Color.Red)
+                }
+
+            }
+
         },
 
-        confirmButton = { Button(
-            onClick = { OnConfirm(nameOfSpecjalization.value) }) {
+        confirmButton = {
+            Button(onClick = { OnConfirm(nameOfSpecjalization.value) })
+            {
             Text("Akceptuj")
-        } },
+            }
+        },
+
+        dismissButton = {
+            Button(onClick = onDismiss)
+            {
+                Text("Anuluj")
+            }
+        }
 
 
-        )
+    )
 
 }
 

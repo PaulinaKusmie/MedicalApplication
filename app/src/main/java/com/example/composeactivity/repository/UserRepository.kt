@@ -20,6 +20,6 @@ class UserRepository @Inject constructor(private val userAPI: UserAPI) {
 
     suspend fun forgotPassword(email: String) = userAPI.forgotPassword(email)
 
-    suspend fun confirmCode(requestAccountRequest: ConfirmAccountRequest) = userAPI.confirmCode(requestAccountRequest)
+    suspend fun confirmCode(requestAccountRequest: ConfirmAccountRequest) : Response<Unit> = userAPI.confirmCode(requestAccountRequest)
 }
 
