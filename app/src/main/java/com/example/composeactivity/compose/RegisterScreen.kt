@@ -1,20 +1,24 @@
 package com.example.composeactivity.compose
 
+import android.R
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -22,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +54,17 @@ import com.example.composeactivity.viewmodel.RegisterViewModel
 fun RegisterScreen(navController: NavController,
                    vm: RegisterViewModel = hiltViewModel()) {
 
+    val showDialog by vm.showDialog.collectAsState()
+    val message by vm.message.collectAsState()
+    val messageCode by vm.messageCode.collectAsState()
+    val isLoading by vm.isLoading.collectAsState()
+
+    val email by vm.email.collectAsState()
+    val password by vm.password.collectAsState()
+    val name by vm.name.collectAsState()
+    val age by vm.age.collectAsState()
+
+    val code by vm.code.collectAsState()
 
     Box(
         modifier = Modifier
@@ -68,7 +85,7 @@ fun RegisterScreen(navController: NavController,
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = vm.getEmail(),
+                value = email,
                 onValueChange = {
                     vm.updateEmail(it)
                     vm.clearMessage()
@@ -81,7 +98,7 @@ fun RegisterScreen(navController: NavController,
             Spacer(Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = vm.getPassword(),
+                value = password,
                 onValueChange = {
                     vm.updatePassword(it)
                     vm.clearMessage()
@@ -96,7 +113,7 @@ fun RegisterScreen(navController: NavController,
             Spacer(Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = vm.getName(),
+                value = name,
                 onValueChange = {
                     vm.updateName(it)
                     vm.clearMessage()
@@ -110,7 +127,7 @@ fun RegisterScreen(navController: NavController,
             Spacer(Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = vm.getAge(),
+                value = age,
                 onValueChange = {
                     vm.updateAge(it)
                     vm.clearMessage()
@@ -122,23 +139,32 @@ fun RegisterScreen(navController: NavController,
 
             Spacer(Modifier.height(8.dp))
 
-            Column(modifier = Modifier.fillMaxWidth().height(70.dp),
-                verticalArrangement = Arrangement.Center) {
-
-                Button(onClick = {vm.register()}, modifier = Modifier.weight(1f)) {
-                    Text("Zarejestruj")
+                Button(
+                    onClick = { vm.register() },
+                    modifier = Modifier.fillMaxWidth()) {
+                    if(isLoading){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    }
+                    Text(if(isLoading) "Rejstrowanie..." else "Zarejestruj")
                 }
-            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            if (vm.getMessage().isNotEmpty()) {
-                Text(vm.getMessage(), color = Color.Red, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            message?. let{
+                Text(it,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth())
             }
+
         }
     }
 
-    if (vm.getShowDialog()) {
+    if (showDialog) {
         AlertDialog(
             onDismissRequest = {vm.setShowDialog(false)},
             title = {
@@ -146,27 +172,29 @@ fun RegisterScreen(navController: NavController,
             },
 
             text = {
-                OutlinedTextField(
-                    value = vm.getCode(),
-                    onValueChange = {
-                        vm.updateCode(it)
-                        vm.clearMessage()
-                    },
-                    label = { Text("Kod") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                )
-
-                vm.getMessage()?.let {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.error
+                Column(){
+                    OutlinedTextField(
+                        value = code ?: " ",
+                        onValueChange = {
+                            vm.updateCode(it)
+                            vm.clearMessage()
+                        },
+                        label = { Text("Kod") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        isError = messageCode!= null
                     )
+
+                    messageCode?.let {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
 
             },
-
 
             confirmButton = {
                 Button(
@@ -179,7 +207,12 @@ fun RegisterScreen(navController: NavController,
     }
 
 
-//    LaunchedEffect(Unit) {
-//        vm.NavigationEvent.collect { navController.navigate("MainScreen")}
-//    }
+    LaunchedEffect(Unit) {
+        vm.NavigationEvent.collect { navController.navigate("MainScreen")}
+    }
 }
+
+
+
+
+

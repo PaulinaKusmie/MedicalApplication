@@ -43,8 +43,7 @@ class MainActivity : ComponentActivity() {
             ComposeActivityTheme {
                 NavHost(navController = navController, startDestination = "LoginScreen") {
                     composable("LoginScreen") {
-                        LoginScreen(navController,
-                            onBack = { navController.popBackStack() })
+                        LoginScreen(navController)
                     }
                     composable("RegisterScreen") {
                         RegisterScreen(navController)

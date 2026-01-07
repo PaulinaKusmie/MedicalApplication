@@ -1,6 +1,7 @@
 package com.example.composeactivity.viewmodel
 import kotlinx.coroutines.*
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,7 +13,10 @@ import com.example.composeactivity.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,15 +24,26 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor (private val userRespository : UserRepository)
     : ViewModel() {
 
-    var email by mutableStateOf("")
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
 
-    var password by mutableStateOf("")
+    private val _password = MutableStateFlow("")
+    val password: StateFlow<String> = _password.asStateFlow()
 
-    var message by mutableStateOf("")
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+
+    fun setPassword(value: String) {
+        _password.value = value
+    }
+
+    fun setEmail(value: String) {
+        _email.value = value
+    }
 
     private val navigationEvent = MutableSharedFlow<Boolean>()
     val NavigationEvent = navigationEvent.asSharedFlow()
-
 
     fun forgotPassword() {
         viewModelScope.launch {
@@ -39,30 +54,59 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
 
      fun login() {
          viewModelScope.launch {
+
+             if (_email.value.isBlank() || _password.value.isBlank()) {
+                 _uiState.value = LoginUiState(
+                     isLoading = false,
+                     message = "Wypełnij wszystkie pola"
+                 )
+                 return@launch
+             }
+
              try {
-             if (email.isBlank() || password.isBlank()) {
-                 message = "Wypełnij wszystkie pola"
-             } else {
-                 val loginRequest = LoginRequest(email, password)
+                 _uiState.value = LoginUiState(isLoading = true)
+                 val loginRequest = LoginRequest(email.value, password.value)
                  var result = userRespository.login(loginRequest)
                   if (result.isSuccessful){
-                      UserSession.saveUserId(result.body()?.id!!)
-                      message = "Sucessful! hello " + result.body()?.name!!
-                      delay(3000)
-                      navigationEvent.emit(true)
+                      result.body()?. let{
+                          UserSession.saveUserId(it.id)
+                          navigationEvent.emit(true)
+                      } ?:{
+                          _uiState.value = LoginUiState(
+                              isLoading = false,
+                              message = "Błąd: brak danych użytkownika"
+                          )
+                      }
+                  } else {
+                      _uiState.value = LoginUiState(
+                          isLoading = false,
+                          message = "Nieprawidłowy email lub hasło"
+                      )
                   }
-                 else message = "Something went wrong! Try again!"
-             }
+
              } catch(e: Exception) {
-                 Log.e("API_ERROR", "Error calling login "+ e.printStackTrace())
+                 Log.e("LoginViewModel ", "Error login "+ e)
+                 _uiState.value = LoginUiState(
+                     isLoading = false,
+                     message = "Wystąpił błąd: ${e.localizedMessage ?: "Spróbuj ponownie"}"
+                 )
+             }
+             finally {
+                 _uiState.value = LoginUiState(isLoading = false)
              }
          }
     }
 
 
     fun clearMessage() {
-        message = ""
+        _uiState.value = LoginUiState(message = "")
     }
 
 
 }
+
+data class LoginUiState(
+    val isLoading : Boolean = false,
+    val message : String? = null,
+    val isSuccess: Boolean = false
+)
