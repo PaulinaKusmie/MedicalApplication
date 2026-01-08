@@ -69,7 +69,7 @@ class LoginViewModel @Inject constructor (private val userRespository : UserRepo
                  var result = userRespository.login(loginRequest)
                   if (result.isSuccessful){
                       result.body()?. let{
-                          UserSession.saveUserId(it.id)
+                          UserSession.saveUserId(it?.id ?: 0)
                           navigationEvent.emit(true)
                       } ?:{
                           _uiState.value = LoginUiState(

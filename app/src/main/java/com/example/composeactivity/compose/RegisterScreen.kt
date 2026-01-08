@@ -47,6 +47,7 @@ import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
 import com.example.composeactivity.viewmodel.LoginViewModel
 import com.example.composeactivity.viewmodel.RegisterViewModel
+import kotlinx.coroutines.processNextEventInCurrentThread
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,16 +56,18 @@ fun RegisterScreen(navController: NavController,
                    vm: RegisterViewModel = hiltViewModel()) {
 
     val showDialog by vm.showDialog.collectAsState()
-    val message by vm.message.collectAsState()
-    val messageCode by vm.messageCode.collectAsState()
-    val isLoading by vm.isLoading.collectAsState()
+    //val message by vm.message.collectAsState()
+    //val messageCode by vm.messageCode.collectAsState()
+    //val isLoading by vm.isLoading.collectAsState()
 
     val email by vm.email.collectAsState()
     val password by vm.password.collectAsState()
     val name by vm.name.collectAsState()
     val age by vm.age.collectAsState()
-
     val code by vm.code.collectAsState()
+
+    val uiState by vm.uiState.collectAsState()
+    val uiStateCode by vm.uiStateCode.collectAsState()
 
     Box(
         modifier = Modifier
@@ -88,7 +91,7 @@ fun RegisterScreen(navController: NavController,
                 value = email,
                 onValueChange = {
                     vm.updateEmail(it)
-                    vm.clearMessage()
+                    uiState.clearMessage()
                 },
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
@@ -101,7 +104,7 @@ fun RegisterScreen(navController: NavController,
                 value = password,
                 onValueChange = {
                     vm.updatePassword(it)
-                    vm.clearMessage()
+                    uiState.clearMessage()
                 },
                 label = { Text("Hasło") },
                 modifier = Modifier.fillMaxWidth(),
@@ -116,7 +119,7 @@ fun RegisterScreen(navController: NavController,
                 value = name,
                 onValueChange = {
                     vm.updateName(it)
-                    vm.clearMessage()
+                    uiState.clearMessage()
                 },
                 label = { Text("Imię") },
                 modifier = Modifier.fillMaxWidth(),
@@ -130,7 +133,7 @@ fun RegisterScreen(navController: NavController,
                 value = age,
                 onValueChange = {
                     vm.updateAge(it)
-                    vm.clearMessage()
+                    uiState.clearMessage()
                 },
                 label = { Text("Wiek") },
                 modifier = Modifier.fillMaxWidth(),
@@ -142,21 +145,21 @@ fun RegisterScreen(navController: NavController,
                 Button(
                     onClick = { vm.register() },
                     modifier = Modifier.fillMaxWidth()) {
-                    if(isLoading){
+                    if(uiState.isLoading){
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             color = Color.White,
                             strokeWidth = 2.dp
                         )
                     }
-                    Text(if(isLoading) "Rejstrowanie..." else "Zarejestruj")
+                    Text(if(uiState.isLoading) "Rejstrowanie..." else "Zarejestruj")
                 }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            message?. let{
+            uiState.message?. let{
                 Text(it,
-                    color = Color.Red,
+                    color = if(uiState.isSuccess)Color.Green else Color.Red,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth())
             }
@@ -177,19 +180,21 @@ fun RegisterScreen(navController: NavController,
                         value = code ?: " ",
                         onValueChange = {
                             vm.updateCode(it)
-                            vm.clearMessage()
+                            uiStateCode.clearMessage()
                         },
                         label = { Text("Kod") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        isError = messageCode!= null
+                        isError =  uiStateCode.message!= null
                     )
 
-                    messageCode?.let {
+                    uiStateCode.message?.let {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = it,
-                            color = MaterialTheme.colorScheme.error
+                            color = if(uiStateCode.isSuccess)Color.Green else Color.Red,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
@@ -200,7 +205,15 @@ fun RegisterScreen(navController: NavController,
                 Button(
                     onClick = { vm.confirmUser() })
                 {
-                    Text("OK")
+                    if(uiStateCode.isLoading){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+
+                    }
+                    Text(if(uiStateCode.isLoading) "Weryfikacja.." else "Zatewierdż")
                 }
             }
         )
