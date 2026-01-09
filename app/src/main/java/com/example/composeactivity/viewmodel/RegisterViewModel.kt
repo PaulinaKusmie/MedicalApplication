@@ -176,12 +176,14 @@ class RegisterViewModel @Inject constructor(private val userRespository : UserRe
                             }
 
                         }
+                         else _uiStateCode.value = RegisterUiState(message = "Coś poszło nie tak! Spróbuj ponownie", isLoading = false, isSuccess = false )
 
                 }
             }
             catch (e : Exception){
-                Log.e("Błąd", "Fail registration please try again  ${e.message ?: "Spróbuj ponownie"}" + e)
+
                 _uiStateCode.value = RegisterUiState(message = "Coś poszło nie tak! Spróbuj ponownie ${e.message ?: ""}", isLoading = false, isSuccess = false )
+                Log.e("Błąd", "Fail registration please try again  ${e.message ?: "Spróbuj ponownie"}" + e)
 
             }
         }
