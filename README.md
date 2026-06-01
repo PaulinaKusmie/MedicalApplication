@@ -20,6 +20,8 @@ Never miss an important visit again.
 
 ## Google Play 
 
+
+## ScreenShots
 https://play.google.com/store/apps/details?id=com.kuciaapp.composeactivity
 
 <img width="351" height="787" alt="Zrzut ekranu 2026-06-01 102938" src="https://github.com/user-attachments/assets/b7b6a2ae-f7d4-4cea-8132-9052acf74b3e" />
