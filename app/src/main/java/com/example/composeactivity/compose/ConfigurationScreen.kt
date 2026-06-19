@@ -27,16 +27,18 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composeactivity.ui.theme.MainColor
+import com.example.composeactivity.viewmodel.SpecjalizationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigurationScreen(
     navController: NavController,
-    onBack: () -> Unit)
-    /*viewModel : SpecjalizationViewModel = viewModel())*/ {
+    onBack: () -> Unit,
+    viewModel : SpecjalizationViewModel = hiltViewModel()) {
 
     Scaffold(
         topBar = {
@@ -74,19 +76,38 @@ fun ConfigurationScreen(
                    text = "Przypomnienia")
            }
            Spacer(modifier = Modifier.height(20.dp))
+
            Card(
                modifier = Modifier
                    .background(MainColor)
                    .border(1.dp,  brush = switchGradient, shape = RoundedCornerShape(15.dp))
                    .fillMaxWidth(),
 
-               onClick = {}
+               onClick = { navController.navigate("SettingsSpecjalizationScreen")}
 
            ) {
                Text(modifier = Modifier
                    .background(MainColor)
                    .fillMaxWidth(),
-                   text = "Dodaj aktywność",
+                   text = "Zarządzanie wizytami",
+                   textAlign = TextAlign.Center)
+           }
+           
+           Spacer(modifier = Modifier.height(20.dp))
+
+           Card(
+               modifier = Modifier
+                   .background(MainColor)
+                   .border(1.dp,  brush = switchGradient, shape = RoundedCornerShape(15.dp))
+                   .fillMaxWidth(),
+
+               onClick = {  navController.navigate("SettingsExaminationScreen")}
+
+           ) {
+               Text(modifier = Modifier
+                   .background(MainColor)
+                   .fillMaxWidth(),
+                   text = "Zarządzanie badaniami",
                    textAlign = TextAlign.Center)
            }
        }

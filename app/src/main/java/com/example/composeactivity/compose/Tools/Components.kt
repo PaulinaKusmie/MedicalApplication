@@ -73,7 +73,8 @@ fun GradientSwitch(
 
 @Composable
 fun WheelPickerDemo(OnDismissRequest : () -> Unit,
-                    dateTime :  MutableState<LocalDateTime?>) {
+                    dateTime :  MutableState<LocalDateTime?>,
+                    canPast : Boolean) {
 
     val currentDate = dateTime.value ?: LocalDateTime.now()
 
@@ -90,9 +91,16 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
                     currentDate.hour,
                     currentDate.minute
                 ),
-                minDateTime = LocalDateTime.now(),
+                minDateTime = if(canPast) { LocalDateTime.of(
+                    currentDate.year -15,
+                    currentDate.month,
+                    currentDate.dayOfMonth,
+                    currentDate.hour,
+                    currentDate.minute
+                )}
+                else  LocalDateTime.now() ,
                 maxDateTime = LocalDateTime.of(
-                    currentDate.year + 50,
+                    currentDate.year + 15,
                     currentDate.month,
                     currentDate.dayOfMonth,
                     currentDate.hour,
@@ -130,5 +138,19 @@ fun WheelPickerDemo(OnDismissRequest : () -> Unit,
         }
     )
 }
-
+@Composable
+fun SimpleDialog(
+    message: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        text = { Text(message) },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
+}
 

@@ -1,5 +1,6 @@
 package com.example.composeactivity.compose
 import android.annotation.SuppressLint
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +30,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -43,8 +43,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composeactivity.data.entity.Reminder
+import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.utils.ToastManager
+
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -52,11 +55,10 @@ import com.example.composeactivity.utils.ToastManager
 @Composable
 fun ReminderScreen( navController: NavController,
                          onBack: () -> Unit,
-                    viewModel: ReminderViewModel = viewModel())
+                    viewModel: ReminderViewModel  = hiltViewModel())
 {
-
-    val reminders by viewModel.reminders.observeAsState(initial = emptyList())
     val context = LocalContext.current
+    val reminders by viewModel.reminders.collectAsState(initial = emptyList())
 
     LaunchedEffect(Unit) {
         ToastManager.toastEvent.collect { message ->
@@ -95,7 +97,7 @@ fun ReminderScreen( navController: NavController,
                     CounterWithDropdown(
                         reminder = reminder,
                         onSelectionChange = { updatedReminder ->
-                            viewModel.updateReminder(updatedReminder.id, updatedReminder.countReminder, updatedReminder.TypeOfTime)
+                            viewModel.updateReminder(updatedReminder)
                         },
                         OnSwipeStateChange = { toDelete ->
                             viewModel.deleteReminder(toDelete)
@@ -128,7 +130,7 @@ fun CounterWithDropdown (
 
 
     var value by remember(reminder) { mutableStateOf(reminder.countReminder) }
-    var type by remember(reminder) { mutableStateOf(reminder.TypeOfTime) }
+    var type by remember(reminder) { mutableStateOf(reminder.typeOfTime) }
 
 
     val state = rememberSwipeToDismissBoxState()
@@ -162,7 +164,7 @@ fun CounterWithDropdown (
                     Button(
                         modifier = Modifier.height(35.dp),
                         onClick = { val newValue = (value + 1).coerceAtLeast(1)
-                            onSelectionChange(reminder.copy(countReminder = newValue, TypeOfTime = type))},
+                            onSelectionChange(reminder.copy(countReminder = newValue, typeOfTime = type))},
 
                         )
 
@@ -170,14 +172,14 @@ fun CounterWithDropdown (
                     Button(
                         modifier = Modifier.height(35.dp),
                         onClick = { val newValue = (value - 1).coerceAtLeast(1)
-                            onSelectionChange(reminder.copy(countReminder = newValue, TypeOfTime = type))}
+                            onSelectionChange(reminder.copy(countReminder = newValue, typeOfTime = type))}
                     )
                     { Text("-") }
                 }
 
                 DropdownMenuBoxTime(type, onSelectionChange = { newType ->
                     type = newType
-                    onSelectionChange(reminder.copy(countReminder = value, TypeOfTime = type))
+                    onSelectionChange(reminder.copy(countReminder = value, typeOfTime = type))
                 })
             }
         }

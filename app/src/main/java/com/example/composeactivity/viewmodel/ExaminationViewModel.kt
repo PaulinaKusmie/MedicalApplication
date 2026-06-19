@@ -2,36 +2,50 @@ package com.example.composeactivity.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.repository.ExaminationRepository
 import kotlinx.coroutines.launch
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.example.composeactivity.UserSession
 import com.example.composeactivity.data.entity.Examination
+import com.example.composeactivity.data.entity.Reminder
+import com.example.composeactivity.data.entity.Specjalization
+import com.example.composeactivity.repository.ReminderRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
+@HiltViewModel
+class ExaminationViewModel @Inject constructor (private val repo: ExaminationRepository) : ViewModel() {
 
-class ExaminationViewModel (application: Application) : AndroidViewModel(application) {
+    private val _examinations = MutableStateFlow<List<Examination>>(emptyList())
+    val examinations: StateFlow<List<Examination>> = _examinations
 
-    private val repo =  ExaminationRepository(AppDatabase.get(application).examinationDao())
-    val examinations = repo.allExamination.asLiveData()
+    private var userId: Int by mutableStateOf(0)
 
-     fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
-         try {
-        repo.updateActive(id, isActive);
-         } catch (e : Exception){ Log.e("Error", "Fail updated active state examination") }
-
+    init {
+        viewModelScope.launch {
+            fetchUserId()
+            fetchExaminationsFromApi()
+        }
     }
 
-     fun addExamination(examination: Examination) = viewModelScope.launch{
-         try {
-        repo.addExamination(examination)
-         } catch (e : Exception){ Log.e("Error", "Fail added examination") }
+    suspend fun fetchUserId() {
+        userId = UserSession.getUserIdFlow().first()!!
     }
 
-      fun deleteExamination(examination: Examination) = viewModelScope.launch{
-          try {
-        repo.deleteExamination(examination)
-      } catch (e : Exception){ Log.e("Error", "Fail deleted examination") }
+    suspend fun fetchExaminationsFromApi()  {
+        val latest = repo.getExamination(userId).first().sortedBy {it.name}
+        _examinations.value = latest
     }
+
+
 }

@@ -2,77 +2,102 @@ package com.example.composeactivity.viewmodel
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composeactivity.data.AppDatabase
 import com.example.composeactivity.data.entity.Reminder
-import com.example.composeactivity.data.entity.Specjalization
 import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.utils.ToastManager
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.composeactivity.UserSession
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.collections.find
+import javax.inject.Inject
 
-class ReminderViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class ReminderViewModel @Inject constructor (private val repo: ReminderRepository)  : ViewModel() {
 
-    private val repo = ReminderRepository(AppDatabase.get(application).reminderDao())
-    val reminders = repo.allReminder.asLiveData()
 
+    private val _reminders = MutableStateFlow<List<Reminder>>(emptyList())
+    val reminders: StateFlow<List<Reminder>> = _reminders
+
+    private var userId: Int by mutableStateOf(0)
+
+    init {
+        viewModelScope.launch{
+            fetchUserId()
+            fetchRemindersFromApi()
+        }
+    }
+
+    suspend fun fetchRemindersFromApi() {
+
+        val latest = repo.allReminder(userId).first()
+        _reminders.value = latest
+
+    }
+
+    suspend fun fetchUserId()  {
+        userId = UserSession.getUserIdOnce()!!
+
+    }
 
     fun addReminder() = viewModelScope.launch{
         try {
-
-            val reminders = repo.allReminder.first()
-            if((reminders.find  {x -> x.countReminder == 1 && x.TypeOfTime == 0 }) != null)
+            fetchRemindersFromApi()
+            if(reminders.value.any { it.countReminder == 1 && it.typeOfTime == 0 })
             {
                 ToastManager.showToast("You can't add same reminders")
 
-            }else if (reminders.count() > 4)
+            }else if (reminders.value.size > 4)
             {
                 ToastManager.showToast("You have added maximum number of reminders")
             }
             else{
-                val newReminder = Reminder(getLastId(),1,0)
+
+                val newReminder = Reminder(getLastId(),userId,1,0)
                 repo.addReminder(newReminder)
+                fetchRemindersFromApi()
             }
 
-        } catch (e : Exception){ Log.e("Error", "Fail added reminder, please try again") }
+        } catch (e : Exception){ Log.e("Error", "Fail added reminder, please try again " + e.printStackTrace()) }
     }
 
 
-    fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = viewModelScope.launch{
+    fun updateReminder(reminder: Reminder) = viewModelScope.launch{
         try {
-            val reminders = repo.allReminder.first()
-            val exists = reminders.any { it.countReminder == countReminder && it.TypeOfTime == typeOfTime }
-            if (exists)
+            fetchRemindersFromApi()
+            if (reminders.value.any { it.countReminder == reminder.countReminder && it.typeOfTime == reminder.typeOfTime })
             {
-                ToastManager.showToast("You already have this same reminders")
+                ToastManager.showToast("You already have this same reminders ")
 
             } else{
-                repo.updateReminder(id, countReminder, typeOfTime)
+               if(reminder != null) {
+                   repo.updateReminder(reminder.id, userId, reminder)
+                   fetchRemindersFromApi()
+               }
+               else ToastManager.showToast("Something went wrong!")
             }
 
-        } catch (e : Exception){ Log.e("Error", "Fail updated reminder, please try again") }
+        } catch (e : Exception){ Log.e("Error", "Fail updated reminder, please try again " + e.printStackTrace()) }
     }
 
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch{
         try {
-            repo.deleteReminder(reminder)
-        } catch (e : Exception){ Log.e("Error", "Fail deleted reminder, please try again") }
+            repo.deleteReminder(reminder, userId)
+            fetchRemindersFromApi()
+        } catch (e : Exception){ Log.e("Error", "Fail deleted reminder, please try again "+ e.printStackTrace()) }
     }
 
 
     suspend fun getLastId() : Int {
-        val reminders = repo.allReminder.first()
-        val lasttId = if (reminders.isEmpty()) 1 else reminders.maxOf { it.id } + 1
-
+        fetchRemindersFromApi()
+        val lasttId = if (reminders.value.isEmpty()) 1 else reminders.value.maxOf { it.id } + 1
         return lasttId
     }
 

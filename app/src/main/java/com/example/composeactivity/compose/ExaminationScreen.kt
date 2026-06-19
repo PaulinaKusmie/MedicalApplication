@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composeactivity.compose.Tools.GradientSwitch
 import com.example.composeactivity.ui.theme.MainColor
@@ -41,8 +44,9 @@ import com.example.composeactivity.ui.theme.MainColor
 @Composable
 fun ExaminationScreen(navController: NavController,
                       onBack: () -> Unit,
-                      viewModel : ExaminationViewModel = viewModel())
-{ val examinations by viewModel.examinations.observeAsState(initial = emptyList())
+                      viewModel : ExaminationViewModel = hiltViewModel())
+{
+    val examinations by viewModel.examinations.collectAsState(initial = emptyList())
 
 
     Scaffold(
@@ -62,18 +66,18 @@ fun ExaminationScreen(navController: NavController,
         containerColor = MainColor
 
     ) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
 
         ) {
-            examinations.forEach {
-                exam -> ExaminationItem(
+            items(count = examinations.size,
+                key = { index -> examinations[index].id } )  { index  ->
+                val exam = examinations[index]
+                 ExaminationItem(
                     exam = exam,
-                    onActiveChange = { isActive ->
-                        viewModel.updateIsActive(exam.id, isActive)
-                    },
                     onClick = {
                         examid ->
                         navController.navigate("AddEditVisitExamination/$examid,${exam.name}")
@@ -88,14 +92,13 @@ fun ExaminationScreen(navController: NavController,
 @Composable
 fun ExaminationItem(
     exam: Examination,
-    onActiveChange: (Boolean) -> Unit,
     onClick: (Int) -> Unit
 ) {
-    // Gradienty
+
     val cardGradient = Brush.linearGradient(
         colors = listOf(
-            Color(0xFFF5E6C8), // Jasny beż
-            Color(0xFFD2B48C)  // Klasyczny beż (tan)
+            Color(0xFFF5E6C8),
+            Color(0xFFD2B48C)
         )
     )
     val switchGradient = Brush.linearGradient(
@@ -128,11 +131,7 @@ fun ExaminationItem(
                 letterSpacing = 0.2.sp,
 
             )
-            GradientSwitch(
-                checked = exam.isActive,
-                onCheckedChange = onActiveChange,
-                gradient = switchGradient
-            )
+
         }
     }
 }

@@ -1,20 +1,22 @@
 package com.example.composeactivity.repository
 
-import com.example.composeactivity.data.dao.ExaminationDao
+import com.example.composeactivity.api.ExaminationAPI
 import com.example.composeactivity.data.entity.Examination
+import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.VisitDate
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
+import javax.inject.Inject
 
-class ExaminationRepository(private val dao: ExaminationDao) {
+class ExaminationRepository  @Inject constructor (private val examinationAPI: ExaminationAPI) {
 
-    val allExamination :Flow<List<Examination>> = dao.getExamination();
+     fun  getAllExamination() :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getAllExamination()) }
 
-    suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
+     fun  getExamination(userId: Int) :  Flow<List<Examination>>  = flow{ emit(examinationAPI.getExamination(userId)) }
 
-    suspend fun addExamination(examination: Examination) = dao.insert(examination)
+    suspend fun addExamination(userid: Int, name: String) = examinationAPI.addExamination(userid,name)
 
-    suspend fun deleteExamination(examination: Examination) = dao.delete(examination)
+    suspend fun deleteExamination(id: Int, userid: Int) = examinationAPI.deleteExamination(id,userid)
 
-    suspend fun getExaminationName(id: Int) = dao.getExaminationName(id)
 }

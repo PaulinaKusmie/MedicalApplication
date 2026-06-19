@@ -1,14 +1,16 @@
 package com.example.composeactivity.data.entity
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+
+import com.example.composeactivity.utils.Named
+import kotlinx.serialization.Serializable
 
 
-@Entity(tableName = "specjalization")
+@Serializable
 data class Specjalization(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val name: String,
+    override val id: Int,
+    override val name: String,
     val isActive: Boolean,
-    val sex: Int = 0, // 0=all, 1=women, 2=men
-    val isPay: Boolean = false,
-)
+    val sex: Int, // 0=all, 1=women, 2=men
+    val isPay: Boolean,
+    override val isVerificated :Boolean
+) : Named
 

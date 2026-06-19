@@ -1,22 +1,23 @@
 package com.example.composeactivity.repository
 
-import com.example.composeactivity.data.dao.SpecjalizationDao
-import com.example.composeactivity.data.entity.Examination
+import android.util.Log
+import com.example.composeactivity.api.SpecjalizationAPI
+
 import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
+import javax.inject.Inject
 
-class SpecjalizationRepository(private val dao: SpecjalizationDao) {
+class SpecjalizationRepository  @Inject constructor (private val specjalizationAPI: SpecjalizationAPI) {
 
+     fun getAllSpecjalizations(): Flow<List<Specjalization>> = flow { emit(specjalizationAPI.getAllSpecjalizations()) }
 
-    val allSpecjalization :Flow<List<Specjalization>> = dao.getSpecjalization();
+     fun getSpecjalizations(userId: Int): Flow<List<Specjalization>> = flow { emit(specjalizationAPI.getSpecjalizations(userId)) }
 
-    suspend fun updateActive(id: Int, isActive: Boolean) = dao.updateActive(id,isActive)
+     suspend fun addSpecjalization(userid: Int, name: String) = specjalizationAPI.addSpecjalization(userid,name)
 
-    suspend fun addSpecjalization(specjalization: Specjalization) = dao.insert(specjalization)
+     suspend fun deleteSpecjalization(id: Int, userid: Int) = specjalizationAPI.deleteSpecjalization(id,userid)
 
-    suspend fun deleteSpecjalization(specjalization: Specjalization) = dao.delete(specjalization)
-
-    suspend fun getSpecjalizationName(id: Int) = dao.getSpecjalizationName(id)
 
 }

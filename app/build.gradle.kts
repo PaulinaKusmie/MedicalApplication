@@ -1,9 +1,12 @@
+import org.gradle.kotlin.dsl.testImplementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt) // ✅ tutaj BEZ "apply false"
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -48,10 +51,7 @@ android {
 }
 
 dependencies {
-
-
-
-    val room_version = "2.6.1"
+    //val room_version = "2.6.1"
     val nav_version = "2.9.0"
 
 
@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.firebase.messaging)     // ✅ Messaging
 
     implementation(libs.wheelPickerCompose)
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.compose.runtime:runtime-livedata")
@@ -81,10 +84,31 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation(platform("androidx.compose:compose-bom:2025.05.00"))
 
+    // Retrofit – jeśli chcesz REST
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
 
-    // ROOM
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.51.1") //
+    kapt("com.google.dagger:hilt-compiler:2.51.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // Unit testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("io.mockk:mockk:1.13.8")
+
+    // Android testing (opcjonalne na razie)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation(kotlin("test"))
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+
 }
+

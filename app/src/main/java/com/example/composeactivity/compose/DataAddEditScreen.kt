@@ -1,5 +1,7 @@
 package com.example.composeactivity.compose
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composeactivity.compose.Tools.DateType
 import com.example.composeactivity.compose.Tools.EntryMode
@@ -46,19 +49,21 @@ import com.example.composeactivity.viewmodel.Mapper.VisitDateMapper.Companion.to
 import com.example.composeactivity.viewmodel.VisitDateViewModel
 import java.time.LocalDateTime
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataAddEditScreen(
     entryMode: EntryMode,
     onBack: () -> Unit,
-    viewModel: VisitDateViewModel = viewModel(),
+    viewModel: VisitDateViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(entryMode) {
-        viewModel.setMode(mode = entryMode)
-    }
 
     val dateVisitState = viewModel.DateVisitUI.value
+    val userId = viewModel.userId
+
+    if(userId > 0){
+        viewModel.setMode(mode = entryMode)
+    }
 
     Scaffold(
         topBar = {
@@ -67,7 +72,7 @@ fun DataAddEditScreen(
                     Text(
                         text = dateVisitState.name ?: "Edytuj Dane",
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            fontFamily = FontFamily.Monospace, // Możesz podmienić np. na FontFamily.Cursive lub własny font
+                            fontFamily = FontFamily.Monospace,
                             color = Color.Black,
                             fontWeight = FontWeight.Light
                         )
@@ -94,7 +99,6 @@ fun DataAddEditScreen(
             var showDialog by remember { mutableStateOf(false) }
             val pickedDate = remember { mutableStateOf<LocalDateTime?>(null) }
             val editingType = remember { mutableStateOf<DateType?>(null) }
-
 
 
             DateSection(
@@ -162,7 +166,8 @@ fun DataAddEditScreen(
                         }
                         editingType.value = null
                     },
-                    dateTime = pickedDate
+                    dateTime = pickedDate,
+                    editingType.value == DateType.DONE
 
                 )
             }
@@ -226,82 +231,3 @@ fun DateSection(
 }
 
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun DataAddEditScreen(
-//    entryMode: EntryMode,
-//    onSaved: () -> Unit,
-//    viewModel: VisitDateViewModel = viewModel(),
-//
-//) {
-//
-//    LaunchedEffect(entryMode) {
-//        viewModel.setMode(mode = entryMode)
-//    }
-//
-//    val dateVisitState = viewModel.dateVisitUI
-//
-//    Scaffold(
-//        topBar = {
-//            TopAppBar( modifier = Modifier.background(MainColor),
-//                title = { Text("${dateVisitState.name}") },
-//                colors = TopAppBarDefaults.topAppBarColors(
-//                    containerColor = MainColor
-//                )
-//            )
-//        },
-//        containerColor = MainColor
-//
-//    ) { padding ->
-//        Column(
-//            modifier = Modifier
-//                .padding(padding)
-//                .padding(16.dp)
-//                .fillMaxWidth()
-//                .fillMaxHeight()
-//                ,
-//            verticalArrangement = Arrangement.Center
-//
-//
-//        ) {
-//            var showDialog by remember { mutableStateOf(false) }
-//                Row(){
-//                    Text("Dzisiaj jest:")
-//                    val okon = dateVisitState.doneDate
-//                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
-//                    Button(
-//                        onClick = { showDialog = true },
-//                    ) {Text("Edycja")}
-//
-//                }
-//                 Spacer(modifier = Modifier.height(8.dp))
-//
-//                Row(){
-//                    Text("Jutro jest:")
-//                    val okon = dateVisitState.doneDate
-//                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
-//                    Spacer(modifier = Modifier.height(8.dp))
-//                }
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Row(){
-//                    Text("Wczoraj było:")
-//                    val okon = dateVisitState.doneDate
-//                    if(okon != null){ DateField(value = Converter.longToFormattedDateTime(okon)) }
-//                    Spacer(modifier = Modifier.height(8.dp))
-//                }
-//
-//            if(showDialog){
-//                WheelPickerDemo(OnDismissRequest = { showDialog = false })
-//            }
-//
-//
-//        }
-//
-//
-//    }
-//}
-//
-//@Composable
-//fun DateField(value: String) {
-//    Text("$value")
-//}

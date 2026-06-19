@@ -2,42 +2,50 @@ package com.example.composeactivity.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-
-import com.example.composeactivity.data.AppDatabase
-
+import com.example.composeactivity.UserSession
+import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
+import com.example.composeactivity.repository.ReminderRepository
 import com.example.composeactivity.repository.SpecjalizationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.Int
 
+@HiltViewModel
+class SpecjalizationViewModel @Inject constructor (private val repo: SpecjalizationRepository) : ViewModel() {
 
-class SpecjalizationViewModel(application: Application) : AndroidViewModel(application) {
+    private val _specjalizations = MutableStateFlow<List<Specjalization>>(emptyList())
+    val specjalizations: StateFlow<List<Specjalization>> = _specjalizations
 
-    private val repo =  SpecjalizationRepository(AppDatabase.get(application).specjalizationDao())
-    val specjalizations = repo.allSpecjalization.asLiveData()
+    private var userId: Int by mutableStateOf(0)
 
-         fun updateIsActive(id: Int, isActive: Boolean) =  viewModelScope.launch {
-             try {
-            repo.updateActive(id, isActive)
-             } catch (e : Exception){ Log.e("Error", "Fail updated active state specjalization") }
-
+    init {
+        viewModelScope.launch {
+            fetchUserId()
+            fetchsSpecjalizationsFromApi()
         }
+    }
 
-        fun addSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
-            try {
-            repo.addSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail added specjalization") }
-        }
+    suspend fun fetchUserId() {
+        userId = UserSession.getUserIdFlow().first()!!
+    }
 
-        fun deleteSpecjalization(specjalization: Specjalization) = viewModelScope.launch{
-            try {
-            repo.deleteSpecjalization(specjalization)
-            } catch (e : Exception){ Log.e("Error", "Fail deleted specjalization") }
-        }
-
-
+    suspend fun fetchsSpecjalizationsFromApi()  {
+        val latest = repo.getSpecjalizations(userId).first().sortedBy {it.name}
+        _specjalizations.value = latest
+    }
 
 }
 

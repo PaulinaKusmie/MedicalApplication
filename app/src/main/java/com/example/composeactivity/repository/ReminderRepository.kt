@@ -1,19 +1,23 @@
 package com.example.composeactivity.repository
 
+import android.util.Log
+import com.example.composeactivity.api.ApiClient
+import com.example.composeactivity.api.ReminderAPI
 import com.example.composeactivity.compose.Tools.TimeType
-import com.example.composeactivity.data.dao.ReminderDao
 import com.example.composeactivity.data.entity.Reminder
 import com.example.composeactivity.data.entity.Specjalization
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ReminderRepository(private val dao: ReminderDao) {
+class ReminderRepository @Inject constructor (private val reminderApi: ReminderAPI) {
 
-    val allReminder :Flow<List<Reminder>> = dao.getReminder();
+     fun allReminder(userId: Int): Flow<List<Reminder>> = flow{ emit(reminderApi.getReminders(userId)) };
 
-    suspend fun updateReminder(id : Int, countReminder: Int, typeOfTime: Int) = dao.updateReminder(id,countReminder,typeOfTime)
+    suspend fun updateReminder(userId : Int, id: Int, reminder: Reminder) = reminderApi.updateReminder(userId, id, reminder)
 
-    suspend fun addReminder(reminder: Reminder) = dao.insert(reminder)
+    suspend fun addReminder(reminder: Reminder) = reminderApi.addReminder(reminder)
 
-    suspend fun deleteReminder(reminder: Reminder) = dao.delete(reminder)
+    suspend fun deleteReminder(reminder: Reminder, userId :Int) = reminderApi.deleteReminder(reminder.id, userId )
 
 }

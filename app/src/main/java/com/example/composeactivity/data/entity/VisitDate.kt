@@ -1,12 +1,22 @@
 package com.example.composeactivity.data.entity
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+
 import com.example.composeactivity.compose.Tools.VisitType
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
-@Entity(tableName = "visitDate")
+@Serializable
 data class VisitDate (
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    val id: Int,
+    val userId: Int,
     val type: VisitType?,
     val foreignId: Int?,
     val doneDate: Long?,
@@ -15,3 +25,12 @@ data class VisitDate (
 )
 
 
+@Serializable data class VisitDateDTO (
+    val id: Int,
+    val userId: Int,
+    val type: Int?,
+    val foreignId: Int?,
+    val doneDate: String?,
+    val predictedDate: String?,
+    val appointmentDate: String?,
+    )

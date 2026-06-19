@@ -16,9 +16,10 @@ import com.example.composeactivity.compose.Tools.EntryMode
 import com.example.composeactivity.ui.theme.ComposeActivityTheme
 import com.example.composeactivity.utils.DailyNotificationWorker
 import com.example.composeactivity.utils.NotificationUtils
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,19 +29,25 @@ class MainActivity : ComponentActivity() {
 
 
 
-        var myWorkRequest = PeriodicWorkRequestBuilder<DailyNotificationWorker>(Duration.ofMinutes(1)).build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "daily_notification",
-            ExistingPeriodicWorkPolicy.KEEP,
-            myWorkRequest
-        )
+//        var myWorkRequest = PeriodicWorkRequestBuilder<DailyNotificationWorker>(Duration.ofMinutes(1)).build()
+//
+//        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+//            "daily_notification",
+//            ExistingPeriodicWorkPolicy.KEEP,
+//            myWorkRequest
+//        )
 
 
         setContent {
             val navController = rememberNavController()
             ComposeActivityTheme {
-                NavHost(navController = navController, startDestination = "MainScreen") {
+                NavHost(navController = navController, startDestination = "LoginScreen") {
+                    composable("LoginScreen") {
+                        LoginScreen(navController)
+                    }
+                    composable("RegisterScreen") {
+                        RegisterScreen(navController)
+                    }
                     composable("MainScreen") {
                         MainScreen(navController)
                     }
@@ -61,6 +68,16 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("ReminderScreen") {
                         ReminderScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
+                    composable("SettingsSpecjalizationScreen") {
+                        SettingsSpecjalizationScreen(
+                            navController,
+                            onBack = { navController.popBackStack() })
+                    }
+                    composable("SettingsExaminationScreen") {
+                        SettingsExaminationScreen(
                             navController,
                             onBack = { navController.popBackStack() })
                     }
@@ -87,7 +104,7 @@ class MainActivity : ComponentActivity() {
                         val id = it.arguments?.getInt("examinationId")!!
                         val name = it.arguments?.getString("name")!!
                         DataAddEditScreen(
-                            entryMode = EntryMode.AddSpecjalizationVisit(id, name),
+                            entryMode = EntryMode.AddExaminationVisit(id, name),
                             onBack = { navController.popBackStack() })
                     }
                 }
